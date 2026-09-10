@@ -1,1 +1,6 @@
 data/raw/ 
+data/americanair_tweets.csv
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.env

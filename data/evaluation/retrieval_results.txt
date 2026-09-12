@@ -1,0 +1,156 @@
+================================================================================
+AMERICAN AIRLINES HISTORICAL RETRIEVAL EVALUATION REPORT
+Baseline 3: TF-IDF Unigrams + Bigrams Cosine Similarity
+================================================================================
+Retrieval Corpus Size:         35,898 interactions (customer -> agent)
+Golden Set Conversations Excluded: 200 (0 leakage)
+Evaluated Golden Examples:     200
+Evaluation Time:               3.89s
+
+--------------------------------------------------------------------------------
+HEADLINE RETRIEVAL METRICS (Top-k = 3)
+--------------------------------------------------------------------------------
+1. Number Evaluated:                  200
+2. Mean Top-1 Cosine Similarity:       0.3412
+3. Mean Top-3 Cosine Similarity:       0.2966
+4. Top-1 Intent Alignment Accuracy:    33.00% (66/200)
+5. Top-3 Intent Alignment (% >= 1):   57.00% (114/200)
+
+--------------------------------------------------------------------------------
+PER-INTENT RETRIEVAL BREAKDOWN
+--------------------------------------------------------------------------------
+Intent                         | Support | Top-1 Sim  | Top-3 Sim  | Top-1 Match  | Top-3 Match 
+------------------------------------------------------------------------------------------------
+FLIGHT_DISRUPTION              | 22      | 0.2915     | 0.2618     |  27.3% ( 6) |  63.6% (14)
+REBOOKING_AND_CHANGES          | 23      | 0.3059     | 0.2720     |  26.1% ( 6) |  34.8% ( 8)
+BAGGAGE_ISSUES                 | 14      | 0.3660     | 0.3190     |  57.1% ( 8) |  85.7% (12)
+SEATS_AND_CABIN                | 14      | 0.3433     | 0.3016     |  14.3% ( 2) |  42.9% ( 6)
+BOOKING_AND_RESERVATIONS       | 8       | 0.3437     | 0.2876     |   0.0% ( 0) |  25.0% ( 2)
+REFUNDS_AND_PAYMENTS           | 25      | 0.2999     | 0.2576     |  36.0% ( 9) |  48.0% (12)
+CHECKIN_AND_BOARDING           | 22      | 0.3717     | 0.3199     |  18.2% ( 4) |  40.9% ( 9)
+LOYALTY_AND_AADVANTAGE         | 20      | 0.4005     | 0.3437     |  30.0% ( 6) |  80.0% (16)
+CUSTOMER_SERVICE_COMPLAINT     | 38      | 0.3207     | 0.2814     |  34.2% (13) |  57.9% (22)
+GENERAL_INQUIRY_AND_OTHER      | 14      | 0.4463     | 0.3769     |  85.7% (12) |  92.9% (13)
+------------------------------------------------------------------------------------------------
+
+================================================================================
+REPRESENTATIVE SUCCESSFUL RETRIEVAL EXAMPLES (High Similarity & Intent Match)
+================================================================================
+Success #1 [Example #122] (Difficulty: easy)
+  Target Golden Intent : LOYALTY_AND_AADVANTAGE
+  Customer Message     : "I have 53k @AmericanAir miles 😊😊😊😊"
+  Top-1 Similarity     : 1.0000
+  Retrieved Historical Interaction #1:
+    - Historical Conv ID  : 6858
+    - Historical Intent   : LOYALTY_AND_AADVANTAGE
+    - Historical Customer : "Where can my miles take me 🤓 @AmericanAir https://t.co/JkCft1Y3JZ"
+    - AmericanAir Response: "@284858 We'd love to take you on an #AAdventure! Please check out this link for available award travel: https://t.co/iJWiiS4WLg"
+----------------------------------------------------------------------
+Success #2 [Example #137] (Difficulty: medium)
+  Target Golden Intent : GENERAL_INQUIRY_AND_OTHER
+  Customer Message     : "What a beautiful fleet! Thank you @AmericanAir for ferrying us on our last trip, we ❤️ you! Looking forward to planning another trip and blogging about our shared experiences!
+
+#AAdvantage #AmericanAirlines #Travel #CLT #TravelBlog #Jetset https://t.co/HctjmH2xP7"
+  Top-1 Similarity     : 1.0000
+  Retrieved Historical Interaction #1:
+    - Historical Conv ID  : 22169
+    - Historical Intent   : GENERAL_INQUIRY_AND_OTHER
+    - Historical Customer : "What a beautiful fleet! Thank you @AmericanAir for ferrying us on our last trip, we ❤️ you! Looking forward to planning another trip and blogging about our shared experiences!
+
+#AAdvantage #AmericanAirlines #Travel #CLT #TravelBlog #Jetset https://t.co/1RFYkiUFFR"
+    - AmericanAir Response: "@148108 We love our red white and blue colors in this filter. It means so much to us to have your love and support, Erik!"
+----------------------------------------------------------------------
+Success #3 [Example #117] (Difficulty: medium)
+  Target Golden Intent : GENERAL_INQUIRY_AND_OTHER
+  Preceding Context    : "[1] Customer (727947): "@AmericanAir do your policies allow for the transport of decapitated elephant heads?" | [2] Amer..."
+  Customer Message     : "@AmericanAir THANK you."
+  Top-1 Similarity     : 0.8839
+  Retrieved Historical Interaction #1:
+    - Historical Conv ID  : 22815
+    - Historical Intent   : GENERAL_INQUIRY_AND_OTHER
+    - Historical Customer : "@AmericanAir Thank you!"
+    - AmericanAir Response: "@727203 You're welcome, Jenn."
+----------------------------------------------------------------------
+Success #4 [Example #106] (Difficulty: easy)
+  Target Golden Intent : BAGGAGE_ISSUES
+  Customer Message     : ". @AmericanAir left my wallet in your plane yesterday 🤦🏽‍♂️"
+  Top-1 Similarity     : 0.8802
+  Retrieved Historical Interaction #1:
+    - Historical Conv ID  : 22992
+    - Historical Intent   : BAGGAGE_ISSUES
+    - Historical Customer : "Can’t believe i left my wallet on the plane :( @AmericanAir"
+    - AmericanAir Response: "@499947 That's not good. Are you still at the airport and have you filed a claim with Lost and Found?"
+----------------------------------------------------------------------
+Success #5 [Example #190] (Difficulty: hard)
+  Target Golden Intent : LOYALTY_AND_AADVANTAGE
+  Customer Message     : "@AmericanAir does it again. Thanks for the upgrade!#executiveplatinum hoping for #conciergekey #travel #BusinessTravel #fAAmily"
+  Top-1 Similarity     : 0.7639
+  Retrieved Historical Interaction #1:
+    - Historical Conv ID  : 20142
+    - Historical Intent   : LOYALTY_AND_AADVANTAGE
+    - Historical Customer : "Another #SundayFunday with the @AmericanAir AmericanAir #fAAmily at @150414 iflymia #executiveplatinum working on #conciergekey #travel #BusinessTravel #airtravel #avgeek https://t.co/G7YoDK5yjG"
+    - AmericanAir Response: "@182473 Sundays are always AAwesome when we get to see you! Thanks for your loyalty and business. #fAAmily"
+----------------------------------------------------------------------
+
+================================================================================
+REPRESENTATIVE POOR RETRIEVAL EXAMPLES (Intent Mismatch / Lexical Divergence)
+================================================================================
+Failure #1 [Example #114] (Difficulty: easy)
+  Target Golden Intent : REBOOKING_AND_CHANGES
+  Preceding Context    : "[1] Customer (669360): "Let me tell y’all about the wildest experience I️ just had a couple days ago. It all starts at J..."
+  Customer Message     : "Whose been fucking up there harassing them and she’s at like the bottom of the fucking list. I’m fucking pissed now cause I️ followed there stupid ass rules and they screwed me over fucking again. So anyways surprise, surprise, I️ don’t get on this fucking flight."
+  Top-1 Similarity     : 0.1699
+  Sampling Notes       : Clear general/conversational inquiry; no specific operational issue keyword.
+  Retrieved Historical Interaction #1 (Mismatched):
+    - Historical Conv ID  : 7536
+    - Historical Intent   : CUSTOMER_SERVICE_COMPLAINT (Mismatch)
+    - Historical Customer : "so yeah bottom line - this woman made me cry on top of an already terrible reason for traveling. thanks!!!! @AmericanAir"
+    - AmericanAir Response: "@332832 We’d like more info to look into this further. Please DM details about what happened with a follow."
+----------------------------------------------------------------------
+Failure #2 [Example #129] (Difficulty: hard)
+  Target Golden Intent : CUSTOMER_SERVICE_COMPLAINT
+  Preceding Context    : "[1] Customer (511293): "@AmericanAir This is ridiculous. Board &amp; get off plane 2 wait. 2.5 hrs with no resolution.Mi..."
+  Customer Message     : "@AmericanAir May I know the excuse for rude staff members. Not having information being treated like I have no status. I’m platinum. What is my loyalty 4"
+  Top-1 Similarity     : 0.1810
+  Sampling Notes       : Multi-intent ambiguity spanning 3+ domains: LOYALTY_AND_AADVANTAGE, CUSTOMER_SERVICE_COMPLAINT, GENERAL_INQUIRY_AND_OTHER.
+  Retrieved Historical Interaction #1 (Mismatched):
+    - Historical Conv ID  : 8495
+    - Historical Intent   : GENERAL_INQUIRY_AND_OTHER (Mismatch)
+    - Historical Customer : ""Thanks for paying $600 for your flight on @AmericanAir; now two people will smash your ribs for five hours.""
+    - AmericanAir Response: "@357058 We want everyone to be comfortable on board, Evan. Please speak with an attendant to see if any other seats may be available!"
+----------------------------------------------------------------------
+Failure #3 [Example #98] (Difficulty: easy)
+  Target Golden Intent : FLIGHT_DISRUPTION
+  Customer Message     : "@685664 @AmericanAir @AmericanAir, get involved and offer direct assistance. Don’t put the burden on weary, stranded, and devastated customers to work it out."
+  Top-1 Similarity     : 0.1967
+  Sampling Notes       : Unambiguous single-intent signal matching FLIGHT_DISRUPTION.
+  Retrieved Historical Interaction #1 (Mismatched):
+    - Historical Conv ID  : 9792
+    - Historical Intent   : GENERAL_INQUIRY_AND_OTHER (Mismatch)
+    - Historical Customer : "Stranded. Thanks @AmericanAir https://t.co/mEAW7fDNY1"
+    - AmericanAir Response: "@383836 We're working hard to get everyone taken care of as quickly as we can. Give us a call at 800-433-7300 if you need any help."
+----------------------------------------------------------------------
+Failure #4 [Example #27] (Difficulty: easy)
+  Target Golden Intent : REBOOKING_AND_CHANGES
+  Preceding Context    : "[1] Customer (340323): "@AmericanAir disgusted I have been at airport since 8am. EVERY flight cancelled. No solution." |..."
+  Customer Message     : "@AmericanAir I am now booked on a connecting flight which arrive in NYC at midnight.  I left my house at 6am"
+  Top-1 Similarity     : 0.2004
+  Sampling Notes       : Unambiguous single-intent signal matching BOOKING_AND_RESERVATIONS.
+  Retrieved Historical Interaction #1 (Mismatched):
+    - Historical Conv ID  : 18100
+    - Historical Intent   : SEATS_AND_CABIN (Mismatch)
+    - Historical Customer : "@AmericanAir 8am flight from rsw to Dallas doesn’t have working WiFi !"
+    - AmericanAir Response: "@623883 We know Wi-Fi on board is very important. Our apologies for the inconvenience this morning."
+----------------------------------------------------------------------
+Failure #5 [Example #131] (Difficulty: easy)
+  Target Golden Intent : LOYALTY_AND_AADVANTAGE
+  Preceding Context    : "[1] Customer (159546): "@AmericanAir when you flight business from sfo to bcn via jfk and they took off without you. whi..."
+  Customer Message     : "@AmericanAir Learn from your partners.  Its no so complex. When you fligth bussines and are gold for oneworld, you expect more for the partners you use https://t.co/Yx68j9CXSm"
+  Top-1 Similarity     : 0.2010
+  Sampling Notes       : Unambiguous single-intent signal matching LOYALTY_AND_AADVANTAGE.
+  Retrieved Historical Interaction #1 (Mismatched):
+    - Historical Conv ID  : 20950
+    - Historical Intent   : CHECKIN_AND_BOARDING (Mismatch)
+    - Historical Customer : "When is @AmericanAir going to learn &amp; start boarding 40 min prior like @Delta does? #late 🙄"
+    - AmericanAir Response: "@681716 We board 30-50 min prior and always want the process to be seamless, Carrie. What's your flight number?"
+----------------------------------------------------------------------

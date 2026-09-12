@@ -1,0 +1,375 @@
+===========================================================================
+PHASE 2: INTENT DISCOVERY & TAXONOMY EXPLORATION REPORT
+Brand: AmericanAir | Dataset: Customer-Support on Twitter
+===========================================================================
+
+[1] DATASET OVERVIEW & HIGH-LEVEL METRICS
+---------------------------------------------------------------------------
+  Total conversations reconstructed   : 26,760
+  Total messages (all participants)   : 84,172
+  Customer messages (inbound == True) : 47,444
+  Unique customer author IDs          : 21,564
+  Average customer messages / conv    : 1.77
+
+[2] CUSTOMER MESSAGE LENGTH PROFILE
+---------------------------------------------------------------------------
+  Character length : min=8, 25%=84, median=124, mean=120.9, 75%=145, max=332
+  Word count       : min=1, 25%=13, median=20, mean=20.3, 75%=25, max=63
+
+[3] VOCABULARY & PHRASE FREQUENCY (Twitter Noise Removed)
+---------------------------------------------------------------------------
+  Top 25 Most Frequent Unigrams:
+     1. flight          : 12,757 occurrences
+     2. thanks          :  3,393 occurrences
+     3. service         :  3,183 occurrences
+     4. time            :  3,114 occurrences
+     5. gate            :  2,775 occurrences
+     6. plane           :  2,762 occurrences
+     7. customer        :  2,522 occurrences
+     8. will            :  2,485 occurrences
+     9. thank           :  2,195 occurrences
+    10. bag             :  2,017 occurrences
+    11. flights         :  1,992 occurrences
+    12. don             :  1,958 occurrences
+    13. seat            :  1,946 occurrences
+    14. help            :  1,936 occurrences
+    15. fly             :  1,930 occurrences
+    16. delayed         :  1,884 occurrences
+    17. hours           :  1,878 occurrences
+    18. back            :  1,792 occurrences
+    19. check           :  1,727 occurrences
+    20. flying          :  1,610 occurrences
+    21. hour            :  1,602 occurrences
+    22. great           :  1,590 occurrences
+    23. today           :  1,557 occurrences
+    24. first           :  1,543 occurrences
+    25. need            :  1,484 occurrences
+
+  Top 20 Most Frequent Bigrams (Phrases):
+     1. customer service       : 1,731 occurrences
+     2. first class            :   517 occurrences
+     3. flight delayed         :   487 occurrences
+     4. american airlines      :   460 occurrences
+     5. flight attendant       :   442 occurrences
+     6. gate agent             :   415 occurrences
+     7. connecting flight      :   325 occurrences
+     8. flight attendants      :   289 occurrences
+     9. hour delay             :   253 occurrences
+    10. never fly              :   253 occurrences
+    11. check bag              :   249 occurrences
+    12. gate agents            :   246 occurrences
+    13. admirals club          :   223 occurrences
+    14. hour flight            :   215 occurrences
+    15. flight crew            :   199 occurrences
+    16. last night             :   191 occurrences
+    17. first time             :   191 occurrences
+    18. boarding pass          :   187 occurrences
+    19. delayed flight         :   186 occurrences
+    20. next flight            :   184 occurrences
+
+[4] REPRESENTATIVE CUSTOMER MESSAGE EXAMPLES
+---------------------------------------------------------------------------
+  Ex 1 [Conv 4777 | Author 257276]:
+       "Been on the tarmac for an hour. Waiting on “the log book to get signed” by the technician. What in the actual fuck are you people doing? @AmericanAir"
+  Ex 2 [Conv 2939 | Author 203998]:
+       "@AmericanAir Will I be able to watch Game 3 of the NLDS tomorrow on my flight??? Plz say yes 🙏🏼"
+  Ex 3 [Conv 3022 | Author 205282]:
+       "@AmericanAir would you mind getting our pilot a fuel cap since we have been waiting on the tarmac for OVER AN HOUR for one??????"
+  Ex 4 [Conv 4171 | Author 233846]:
+       "@AmericanAir it's bad enough that your food menu selection is terrible (truly the worst among the top carriers) but its equally disgusting that when crossing the country on flight AA1239 the only thing worth eating was sold out. Terrible job by you! Do better ASAP!"
+  Ex 5 [Conv 16076 | Author 548493]:
+       "@AmericanAir Can you just call me. That will be much faster. I’m infuriated with your company right now and their lack of professionalism and honor."
+
+[5] DETERMINISTIC SUPPORT THEME DISCOVERY & DISTRIBUTION
+---------------------------------------------------------------------------
+  * Note: Regex/keyword matching is an exploratory instrument to discover
+    latent intent volume, NOT a production classifier.
+
+  Domain Volume Ranking:
+     1. Airport & Gate Operations            :  7,500 ( 15.8%)
+     2. Flight Delay & Cancellation          :  5,826 ( 12.3%)
+     3. Seats & Cabin Comfort                :  4,185 (  8.8%)
+     4. Customer Service & Staff Complaint   :  4,095 (  8.6%)
+     5. Baggage & Luggage                    :  3,974 (  8.4%)
+     6. Payments, Refunds & Fees             :  3,713 (  7.8%)
+     7. Check-in & Boarding                  :  2,758 (  5.8%)
+     8. Loyalty & AAdvantage                 :  1,987 (  4.2%)
+     9. Booking & Reservations               :  1,904 (  4.0%)
+    10. Flight Information & Status          :  1,460 (  3.1%)
+    11. Ticket Change & Rebooking            :    965 (  2.0%)
+    12. Pricing & Fares                      :    849 (  1.8%)
+
+  Domain Representative Examples (5 per theme):
+
+  >>> THEME: AIRPORT & GATE OPERATIONS (Total matches: 7,500)
+      [1] (Conv 1 | Tweet 999)
+          "@AmericanAir Could you have someone on your lax team available to guide me to my gate ASAP..."
+      [2] (Conv 2 | Tweet 1002)
+          "Ben Tennyson and an American Airlines pilot. 🎃 #trunkortreat #halloween #2017 #diycostume #parenting @americanair … https://t.co/f1nNHQ0iLa https://t.co/lDViDkR..."
+      [3] (Conv 5 | Tweet 1062)
+          "Check out these tiny trick-or-treaters all dressed up in our #NICU. Hey @AmericanAir! We have your youngest #pilot in training! #Halloween https://t.co/0C3aXJhi..."
+      [4] (Conv 10 | Tweet 1937)
+          "@AmericanAir I was long gone from the airport by then..."
+      [5] (Conv 14 | Tweet 3109)
+          "@AmericanAir Despite flying w/ same from EWR, forced @ MIA to check guitar &amp; charged $25. Not @ gate, B4 security. Flt not full. WHY?..."
+
+  >>> THEME: FLIGHT DELAY & CANCELLATION (Total matches: 5,826)
+      [1] (Conv 20 | Tweet 3585)
+          "@AmericanAir what’s going on with flight 301 DTW &gt; DFW? Delayed over 3 hours. Will it be canceled?..."
+      [2] (Conv 21 | Tweet 3594)
+          "@AmericanAir stuck on flight 609 in Charlotte over 55 minutes due to a computer card tech issue while pilot repeatedly advised it would only take a "few minutes..."
+      [3] (Conv 25 | Tweet 3609)
+          "@AmericanAir I had to end my trip way sooner than expected. :( Bought a new flight because it was way cheaper than changing my return. What do I need to do to c..."
+      [4] (Conv 37 | Tweet 5335)
+          "@AmericanAir just sent me an email giving me 20k miles for a flight delay I complained about on Twitter. Nice job, my friends...."
+      [5] (Conv 50 | Tweet 8748)
+          "Taking off from CLT to DEN almost 2 hours late had to board a new plane bc the other @AmericanAir plane broke. I'm sick &amp; need to get home 😥..."
+
+  >>> THEME: SEATS & CABIN COMFORT (Total matches: 4,185)
+      [1] (Conv 11 | Tweet 1945)
+          "Big thx 2 @AmericanAir 4 guacamole and margs of thx while the @116147 lounge upgrades are underway #nomnom https://t.co/PCW4Vdxbyf..."
+      [2] (Conv 12 | Tweet 3103)
+          "Yo @AmericanAir, I’m on flight 48 32C (DFW to Paris) and sitting next to THE loudest baby I’ve ever heard in my life. How about an upgrade?..."
+      [3] (Conv 12 | Tweet 3096)
+          "@AmericanAir Bought a flight pass to tell you guys this baby is still Chucky possessed screaming. Only seats available in cabin are the ones around me...."
+      [4] (Conv 15 | Tweet 3111)
+          "Yo @AmericanAir why are there fifteen empty business class seats and only one person that got upgraded? #Weak #NoTreat? #ThenTrickItIs..."
+      [5] (Conv 17 | Tweet 3574)
+          "Really @AmericanAir.. 7hour international flight and no seat back entertainment screens.. c’mon..."
+
+  >>> THEME: CUSTOMER SERVICE & STAFF COMPLAINT (Total matches: 4,095)
+      [1] (Conv 18 | Tweet 3577)
+          "@AmericanAir Just have to say the Flight Attenants on Flight 1361 from BDL to ORD we’re awesome! Gate agents at BDL also! They need a shout out for awesome cust..."
+      [2] (Conv 34 | Tweet 4065)
+          "When I email @AmericanAir I get the best customer service. Why the people on the phone aren't enabled to do the same just baffles me...."
+      [3] (Conv 36 | Tweet 4073)
+          "@AmericanAir Here is a customer service tip! This $50 just cost you thousand of dollars moving forward. I hope your CEO learns from this!..."
+      [4] (Conv 40 | Tweet 6626)
+          "@AmericanAir When my daughter couldn't make up her mind on what to drink, the flight attendant rolled her eyes at her and proceeded to say something......"
+      [5] (Conv 40 | Tweet 6627)
+          "@AmericanAir snarky and rude under her breath as she proceeded to walk past us. Then she said something rude about it to my wife, not knowing that she......"
+
+  >>> THEME: BAGGAGE & LUGGAGE (Total matches: 3,974)
+      [1] (Conv 10 | Tweet 1941)
+          "Look what @AmericanAir did to my bag. https://t.co/QUeBqf8JJf..."
+      [2] (Conv 14 | Tweet 3107)
+          "@AmericanAir I'm aware. Fits in overhead.This was a return trip. Had same luggage going. This was pre-security. Gate chck, ok, but Empty overheads on flt..."
+      [3] (Conv 22 | Tweet 3598)
+          "Give me and the 50,000 other people our bags @AmericanAir! #travelwoes #longestday..."
+      [4] (Conv 22 | Tweet 3596)
+          "@AmericanAir I was forced to check my small suitcase. Never happened before.  There was plenty of storage space too. Fml..."
+      [5] (Conv 33 | Tweet 3638)
+          "@AmericanAir I love dogs but they don’t belong in #airplane #cabins.  It was bad enough when anyone could say they had a #therapypet.  I can’t keep my small bag..."
+
+  >>> THEME: PAYMENTS, REFUNDS & FEES (Total matches: 3,713)
+      [1] (Conv 3 | Tweet 1005)
+          "I’m sorry, what? It’s going to COST me $50 to transfer 4,000 AA Advantage points to my spouse? @AmericanAir this is ridiculous!!..."
+      [2] (Conv 3 | Tweet 1004)
+          "@AmericanAir Right, but I earned those. I also shouldn’t have to pay to pass them to my own spouse. You need to change your program...."
+      [3] (Conv 9 | Tweet 1925)
+          "@AmericanAir ........still....on....hold.....they made the booking. I am trying to pay.....so #frustrating...."
+      [4] (Conv 9 | Tweet 1927)
+          "@AmericanAir well now i am told the ticket cost is an additional $200/person to pay....because of the wait....omg..."
+      [5] (Conv 13 | Tweet 3105)
+          "@AmericanAir - I give you grief when things go poorly.  Here’s some credit: The guacamole in the Admirals Club is an outstanding addition. https://t.co/kfjAW6FM..."
+
+  >>> THEME: CHECK-IN & BOARDING (Total matches: 2,758)
+      [1] (Conv 21 | Tweet 3594)
+          "@AmericanAir stuck on flight 609 in Charlotte over 55 minutes due to a computer card tech issue while pilot repeatedly advised it would only take a "few minutes..."
+      [2] (Conv 21 | Tweet 3592)
+          "@AmericanAir After 1 hour of being lied to by the pilot - we are now being totally inconvenienced by having to un-board this plane and board another plane - mea..."
+      [3] (Conv 21 | Tweet 3587)
+          "@AmericanAir 1st and foremost - your crew has been lying to us for over an hour. Then after being deceived by your crew for over an hour - we are being lied to ..."
+      [4] (Conv 27 | Tweet 3613)
+          "@AmericanAir if I have the platinum select aadvantage card and I purchased an int’l ticket through your site but it ended up being on British Air, will I still ..."
+      [5] (Conv 41 | Tweet 6912)
+          "@AmericanAir I bought a carry on luggage that 24×14×9+2.5 EXP. What does the 2.5 EXP STAND FOR on my luggage? Will check in charge me 25?..."
+
+  >>> THEME: LOYALTY & AADVANTAGE (Total matches: 1,987)
+      [1] (Conv 27 | Tweet 3613)
+          "@AmericanAir if I have the platinum select aadvantage card and I purchased an int’l ticket through your site but it ended up being on British Air, will I still ..."
+      [2] (Conv 37 | Tweet 5335)
+          "@AmericanAir just sent me an email giving me 20k miles for a flight delay I complained about on Twitter. Nice job, my friends...."
+      [3] (Conv 39 | Tweet 6604)
+          "I am an @AmericanAir frequent flyer and I can attest that they suck The Best Frequent Flyer Programs to Strive For https://t.co/5hMhrGuYvJ..."
+      [4] (Conv 39 | Tweet 6603)
+          "@AmericanAir Here is some feedback. Stop diluting the weight of your frequent flyer program. I never get upgrades anymore and I fly every week!..."
+      [5] (Conv 62 | Tweet 9953)
+          "@AmericanAir Hi!  Can you please give me a phone number to call to check flight status?  Thank you!..."
+
+  >>> THEME: BOOKING & RESERVATIONS (Total matches: 1,904)
+      [1] (Conv 9 | Tweet 1922)
+          "Trying to book a flight on @AmericanAir and an error comes up: System having trouble. Anyone else having problem?..."
+      [2] (Conv 9 | Tweet 1921)
+          "@AmericanAir already did...changed browsers, did all my techie tricks and still can't make a reservation after 1 hour!!..."
+      [3] (Conv 9 | Tweet 1925)
+          "@AmericanAir ........still....on....hold.....they made the booking. I am trying to pay.....so #frustrating...."
+      [4] (Conv 9 | Tweet 1930)
+          "@AmericanAir finally booked and they honored lower fare....that was still available on line..."
+      [5] (Conv 35 | Tweet 4068)
+          "Anyone who needs to book a flight for our wedding: DO IT NOW! Round trip only $85 with @AmericanAir 💍✈️..."
+
+  >>> THEME: FLIGHT INFORMATION & STATUS (Total matches: 1,460)
+      [1] (Conv 21 | Tweet 3589)
+          "@AmericanAir I have flown @AmericanAir 15 times in the past 12 months and only departed on schedule 4 times...."
+      [2] (Conv 21 | Tweet 3588)
+          "@AmericanAir Not only has my family, and several other families been inconvenienced by @AmericanAir  today - this is now 16 flights in one year with only 5 "on ..."
+      [3] (Conv 32 | Tweet 3630)
+          "Hey @AmericanAir! Rocky here on flight AA2254. We were supposed to depart at 6:07PM but it is now 6:54PM and the crew just informed us that our captain is missi..."
+      [4] (Conv 36 | Tweet 4074)
+          "@AmericanAir That’s ok I will fly with @48751 from now on at least I know I will be on time and they will let me bring what I want! Bye AA..."
+      [5] (Conv 51 | Tweet 9448)
+          "AA1008 - awesome job guys. On time departure, great service, arrived early. Thank you @AmericanAir..."
+
+  >>> THEME: TICKET CHANGE & REBOOKING (Total matches: 965)
+      [1] (Conv 31 | Tweet 3623)
+          "#aws #reInvent stating off right, standby early on @AmericanAir and a Super80! Missed you buddy #AllTheFeelz https://t.co/beW63HtC9e..."
+      [2] (Conv 136 | Tweet 29638)
+          "@AmericanAir Shouldn't you know the answer to that question? Also, if you rebook do something to make it right. #upgrademe or something. #customerservice..."
+      [3] (Conv 136 | Tweet 29641)
+          "@AmericanAir Horrible. Can you at least get me on the #upgrade #standby list? #frequent @AmericanAir flier here. Have multiple #flights even this wk!..."
+      [4] (Conv 167 | Tweet 33534)
+          "@AmericanAir You're trying to rebook me for an 8:30pm flight when I was originally supposed to fly out at 11:15am?! Oh @AmericanAir you're funny...."
+      [5] (Conv 225 | Tweet 41836)
+          "@AmericanAir - Just paid $275 for a flight change for flight departure &amp; now being asked to pay $600 to maintain my original return #help..."
+
+  >>> THEME: PRICING & FARES (Total matches: 849)
+      [1] (Conv 9 | Tweet 1930)
+          "@AmericanAir finally booked and they honored lower fare....that was still available on line..."
+      [2] (Conv 45 | Tweet 8210)
+          "@AlaskaAir @SouthwestAir @AmericanAir any of y’all got cheap flights to Scranton, PA aka The Electric City? https://t.co/GeXPkUrOFg..."
+      [3] (Conv 75 | Tweet 13320)
+          "@AmericanAir acá un te serbice sucia. Same price but one baggage less. Bogotá airport staff are rude and make a real mess..."
+      [4] (Conv 89 | Tweet 15791)
+          "@AmericanAir You increased the price of two near-empty flights while I was paying. Seriously? Is this even legal? Platinum status means nada https://t.co/gkbOFb..."
+      [5] (Conv 163 | Tweet 33510)
+          "@AmericanAir I can deal with a mechanical issue...your pilot being stuck in traffic doesn't work for me..."
+
+[6] AMBIGUITY & CROSS-INTENT OVERLAP ANALYSIS
+---------------------------------------------------------------------------
+  Number of Themes Matched per Message:
+    No specific keyword match (General/Other)    : 21,265 ( 44.8%)
+    1 theme(s)                                   : 16,272 ( 34.3%)
+    2 theme(s)                                   :  7,311 ( 15.4%)
+    3 theme(s)                                   :  2,140 (  4.5%)
+    4 theme(s)                                   :    383 (  0.8%)
+    5 theme(s)                                   :     68 (  0.1%)
+    6 theme(s)                                   :      5 (  0.0%)
+
+  Top 10 Most Frequent Multi-Intent Co-occurrences:
+     1. Airport & Gate Operations + Flight Delay & Cancellation
+        Overlap count: 1,607 (3.4% of all customer tweets)
+     2. Airport & Gate Operations + Customer Service & Staff Complaint
+        Overlap count: 1,028 (2.2% of all customer tweets)
+     3. Airport & Gate Operations + Check-in & Boarding
+        Overlap count: 822 (1.7% of all customer tweets)
+     4. Airport & Gate Operations + Baggage & Luggage
+        Overlap count: 772 (1.6% of all customer tweets)
+     5. Airport & Gate Operations + Seats & Cabin Comfort
+        Overlap count: 608 (1.3% of all customer tweets)
+     6. Flight Delay & Cancellation + Payments, Refunds & Fees
+        Overlap count: 565 (1.2% of all customer tweets)
+     7. Baggage & Luggage + Payments, Refunds & Fees
+        Overlap count: 555 (1.2% of all customer tweets)
+     8. Payments, Refunds & Fees + Seats & Cabin Comfort
+        Overlap count: 553 (1.2% of all customer tweets)
+     9. Customer Service & Staff Complaint + Flight Delay & Cancellation
+        Overlap count: 463 (1.0% of all customer tweets)
+    10. Airport & Gate Operations + Flight Information & Status
+        Overlap count: 423 (0.9% of all customer tweets)
+
+  Representative Ambiguous / Multi-Intent Customer Messages:
+
+  Ambiguous Ex 1 [Matched Themes: Flight Delay & Cancellation | Check-in & Boarding | Airport & Gate Operations]:
+      Text: "@AmericanAir stuck on flight 609 in Charlotte over 55 minutes due to a computer card tech issue while pilot repeatedly advised it would only take a "few minutes" to fix. Why wasn't this issue reported by previous pilot that arrived minutes b4 we boarded in effort to save time?"
+      Ambiguity Analysis: The customer message bridges distinct operational units.
+
+  Ambiguous Ex 2 [Matched Themes: Baggage & Luggage | Payments, Refunds & Fees | Check-in & Boarding]:
+      Text: "@AmericanAir I bought a carry on luggage that 24×14×9+2.5 EXP. What does the 2.5 EXP STAND FOR on my luggage? Will check in charge me 25?"
+      Ambiguity Analysis: The customer message bridges distinct operational units.
+
+  Ambiguous Ex 3 [Matched Themes: Flight Delay & Cancellation | Check-in & Boarding | Airport & Gate Operations]:
+      Text: "Taking off from CLT to DEN almost 2 hours late had to board a new plane bc the other @AmericanAir plane broke. I'm sick &amp; need to get home 😥"
+      Ambiguity Analysis: The customer message bridges distinct operational units.
+
+  Ambiguous Ex 4 [Matched Themes: Loyalty & AAdvantage | Airport & Gate Operations | Customer Service & Staff Complaint]:
+      Text: "One of several questioning loyalty to @AmericanAir after poor treatment by gate agent tonight. Flight 41 ORD to SFO."
+      Ambiguity Analysis: The customer message bridges distinct operational units.
+
+  Ambiguous Ex 5 [Matched Themes: Baggage & Luggage | Airport & Gate Operations | Customer Service & Staff Complaint]:
+      Text: "1/ Why @AmericanAir am I️ loyal to you? Your gate agent greg on ORD-SFO flight wouldn’t let over a dozen passengers take bags designed"
+      Ambiguity Analysis: The customer message bridges distinct operational units.
+
+  Ambiguous Ex 6 [Matched Themes: Baggage & Luggage | Airport & Gate Operations | Customer Service & Staff Complaint | Pricing & Fares]:
+      Text: "@AmericanAir acá un te serbice sucia. Same price but one baggage less. Bogotá airport staff are rude and make a real mess"
+      Ambiguity Analysis: The customer message bridges distinct operational units.
+
+===========================================================================
+[7] RECOMMENDED CANDIDATE INTENT TAXONOMY (10 INTENTS)
+===========================================================================
+
+Based on empirical data volume, operational actionability, and semantic distinctness,
+we recommend a 10-intent taxonomy tailored specifically for AmericanAir support:
+
+1. FLIGHT_DISRUPTION (Delay / Cancellation / Diversion)
+   - Scope: Notifications and complaints regarding delayed, canceled, or diverted flights,
+     runway ground stops, and stranded passengers.
+   - Distinctness: Focuses on the status of the disrupted flight itself, distinct from
+     the subsequent request to rebook or refund.
+
+2. REBOOKING_AND_CHANGES (Flight Change / Missed Connection / Standby)
+   - Scope: Actionable requests to modify flight dates, rebook due to missed connections,
+     switch itinerary, or join standby lists.
+   - Distinctness: While often triggered by a flight delay, this intent captures the
+     forward-looking request to modify a ticket/route rather than merely reporting the delay.
+
+3. BAGGAGE_ISSUES (Lost / Delayed / Damaged Luggage & Baggage Fees)
+   - Scope: Inquiries regarding missing baggage, carousel wait times, damaged suitcases,
+     baggage claim tracking, and checked bag fees.
+   - Distinctness: Isolated to physical luggage lifecycle and baggage tracking.
+
+4. SEATS_AND_CABIN (Seat Selection / Assignments / Cabin Upgrades)
+   - Scope: Requests to change seat (aisle/window), complaints about seat separation,
+     seat upgrade eligibility, bulkhead/exit rows, and onboard cabin comfort.
+   - Distinctness: Focuses strictly on physical seating and cabin tier upgrades, distinct
+     from general booking or reservation management.
+
+5. BOOKING_AND_RESERVATIONS (New Booking / Confirmation / Itinerary)
+   - Scope: Inquiries about booking flights, record locators/confirmation codes, name
+     corrections, and schedule confirmations.
+   - Distinctness: Handles standard booking inquiries and itinerary confirmations before
+     any flight changes, cancellations, or refunds occur.
+
+6. REFUNDS_AND_PAYMENTS (Refunds / Billing / Unwanted Charges / Vouchers)
+   - Scope: Requests for monetary refunds, flight voucher redemption, compensation for
+     disruptions, and disputes over unexpected credit card charges.
+   - Distinctness: Financial transaction resolutions, distinct from ticket rebooking or
+     initial fare shopping.
+
+7. CHECKIN_AND_BOARDING (Boarding Passes / Mobile App / Gates / TSA)
+   - Scope: Inability to check in on the website/app, mobile boarding pass errors, gate
+     assignments, boarding group sequences, and TSA checkpoint delays.
+   - Distinctness: Day-of-travel gate and departure readiness, distinct from overall
+     flight delays or seat requests.
+
+8. LOYALTY_AND_AADVANTAGE (Miles / Elite Status / Account Management)
+   - Scope: Missing AAdvantage miles, tier status progress (Gold/Platinum/Exec Plat),
+     mileage redemption, and account login issues.
+   - Distinctness: Long-term customer loyalty program management, distinct from regular
+     flight transactions.
+
+9. CUSTOMER_SERVICE_COMPLAINT (Staff Conduct / Agent Attitude / In-Flight Service)
+   - Scope: Escalations regarding rude gate agents, unhelpful phone representatives,
+     in-flight crew behavior, and general service quality complaints.
+   - Distinctness: Feedback on human interactions and service standards where no
+     immediate logistical booking change is necessarily requested.
+
+10. GENERAL_INQUIRY_AND_OTHER (Flight Status Inquiries / FAQs / Kudos / Miscellaneous)
+    - Scope: Routine queries ("What plane flies AA100?"), compliments/thank you messages,
+      travel policy queries (pets, unaccompanied minors), and unclassifiable tweets.
+    - Distinctness: Catches unclassifiable or conversational noise that does not require
+      a specialized transactional support workflow.
+
+===========================================================================
+END OF REPORT
+===========================================================================

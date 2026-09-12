@@ -1,0 +1,553 @@
+================================================================================
+AMERICAN AIRLINES INTENT CLASSIFICATION EVALUATION REPORT
+Model: Baseline 2: TF-IDF + Logistic Regression (Weak Supervision)
+================================================================================
+Training Dataset:        47,244 historical customer messages (weakly labeled)
+Evaluation Dataset:      200 held-out golden set examples (hand-labeled ground truth)
+
+--------------------------------------------------------------------------------
+WEAK-LABEL TRAINING DISTRIBUTION (47,244 Examples)
+--------------------------------------------------------------------------------
+  GENERAL_INQUIRY_AND_OTHER     :  24317 ( 51.5%)
+  FLIGHT_DISRUPTION             :   4959 ( 10.5%)
+  CUSTOMER_SERVICE_COMPLAINT    :   4354 (  9.2%)
+  BAGGAGE_ISSUES                :   3546 (  7.5%)
+  CHECKIN_AND_BOARDING          :   2550 (  5.4%)
+  SEATS_AND_CABIN               :   2338 (  4.9%)
+  REFUNDS_AND_PAYMENTS          :   1803 (  3.8%)
+  LOYALTY_AND_AADVANTAGE        :   1459 (  3.1%)
+  REBOOKING_AND_CHANGES         :   1041 (  2.2%)
+  BOOKING_AND_RESERVATIONS      :    877 (  1.9%)
+
+--------------------------------------------------------------------------------
+GOLDEN SET OVERALL METRICS (Held-Out Evaluation)
+--------------------------------------------------------------------------------
+Accuracy:                0.6850 (68.50%)
+Macro Precision:         0.7075
+Macro Recall:            0.6910
+Macro F1-Score:          0.6847
+Weighted F1-Score:       0.6998
+
+--------------------------------------------------------------------------------
+PER-INTENT PERFORMANCE BREAKDOWN
+--------------------------------------------------------------------------------
+Intent                         | Precision  | Recall     | F1-Score   | Support 
+--------------------------------------------------------------------------------
+FLIGHT_DISRUPTION              | 1.0000     | 0.6818     | 0.8108     | 22      
+REBOOKING_AND_CHANGES          | 0.7391     | 0.7391     | 0.7391     | 23      
+BAGGAGE_ISSUES                 | 0.6111     | 0.7857     | 0.6875     | 14      
+SEATS_AND_CABIN                | 0.7143     | 0.7143     | 0.7143     | 14      
+BOOKING_AND_RESERVATIONS       | 0.6250     | 0.6250     | 0.6250     | 8       
+REFUNDS_AND_PAYMENTS           | 0.7368     | 0.5600     | 0.6364     | 25      
+CHECKIN_AND_BOARDING           | 0.7500     | 0.6818     | 0.7143     | 22      
+LOYALTY_AND_AADVANTAGE         | 0.7895     | 0.7500     | 0.7692     | 20      
+CUSTOMER_SERVICE_COMPLAINT     | 0.8065     | 0.6579     | 0.7246     | 38      
+GENERAL_INQUIRY_AND_OTHER      | 0.3030     | 0.7143     | 0.4255     | 14      
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+CONFUSION MATRIX
+Rows = Ground Truth (final_intent), Columns = Predicted Intent
+--------------------------------------------------------------------------------
+Legend:
+  [1 ] FLIGHT_DISRUPTION
+  [2 ] REBOOKING_AND_CHANGES
+  [3 ] BAGGAGE_ISSUES
+  [4 ] SEATS_AND_CABIN
+  [5 ] BOOKING_AND_RESERVATIONS
+  [6 ] REFUNDS_AND_PAYMENTS
+  [7 ] CHECKIN_AND_BOARDING
+  [8 ] LOYALTY_AND_AADVANTAGE
+  [9 ] CUSTOMER_SERVICE_COMPLAINT
+  [10] GENERAL_INQUIRY_AND_OTHER
+
+Actual                              [1]   [2]   [3]   [4]   [5]   [6]   [7]   [8]   [9]  [10]   Total
+-----------------------------------------------------------------------------------------------------
+[1 ] FLIGHT_DISRUPTION              15     1     0     0     0     0     0     1     0     5      22
+[2 ] REBOOKING_AND_CHANGES           0    17     0     1     0     2     1     0     1     1      23
+[3 ] BAGGAGE_ISSUES                  0     0    11     1     0     0     1     0     0     1      14
+[4 ] SEATS_AND_CABIN                 0     0     0    10     0     2     0     1     0     1      14
+[5 ] BOOKING_AND_RESERVATIONS        0     1     0     0     5     0     0     1     1     0       8
+[6 ] REFUNDS_AND_PAYMENTS            0     3     1     1     1    14     0     0     2     3      25
+[7 ] CHECKIN_AND_BOARDING            0     1     1     0     0     0    15     0     1     4      22
+[8 ] LOYALTY_AND_AADVANTAGE          0     0     0     0     0     0     3    15     0     2      20
+[9 ] CUSTOMER_SERVICE_COMPLAINT      0     0     3     0     2     1     0     1    25     6      38
+[10] GENERAL_INQUIRY_AND_OTHER       0     0     2     1     0     0     0     0     1    10      14
+-----------------------------------------------------------------------------------------------------
+
+================================================================================
+MISCLASSIFIED GOLDEN EXAMPLES ANALYSIS (Total: 63 / 200)
+================================================================================
+Error Distribution by Difficulty: easy: 25, hard: 14, medium: 24
+
+Error #01 [Example #3] (Difficulty: easy)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : BAGGAGE_ISSUES
+  - Customer Message    : ".@AmericanAir my flights to/from MCI were super dirty! I don't want to pack cleaning supplies when you limit my overhead bin space! #aaflyer"
+  - Sampling Notes      : Unambiguous single-intent signal matching BAGGAGE_ISSUES.
+------------------------------------------------------------
+Error #02 [Example #6] (Difficulty: hard)
+  - Ground Truth Intent : SEATS_AND_CABIN
+  - Predicted Intent    : REFUNDS_AND_PAYMENTS
+  - Candidate Heuristic : BAGGAGE_ISSUES
+  - Customer Message    : "About to spend 4 uncomfortable hours with  @AmericanAir. If you charge extra for oversized bags, why don’t you charge extra for oversized people who can’t fit in a seat?"
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: BAGGAGE_ISSUES, SEATS_AND_CABIN, REFUNDS_AND_PAYMENTS.
+------------------------------------------------------------
+Error #03 [Example #8] (Difficulty: easy)
+  - Ground Truth Intent : CHECKIN_AND_BOARDING
+  - Predicted Intent    : BAGGAGE_ISSUES
+  - Candidate Heuristic : BAGGAGE_ISSUES
+  - Preceding Context   : [1] Customer (309623): "1st time to fly @AmericanAir. How many carry on is allowed? Can i have 2 carry on and 1 handbag ...
+  - Customer Message    : "@AmericanAir I have the economy. So 1 small item is 1 small luggage @AmericanAir ?"
+  - Sampling Notes      : Unambiguous single-intent signal matching BAGGAGE_ISSUES.
+------------------------------------------------------------
+Error #04 [Example #19] (Difficulty: hard)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : BAGGAGE_ISSUES
+  - Candidate Heuristic : BAGGAGE_ISSUES
+  - Customer Message    : "@AmericanAir how long does it take to get a response to an email inquiry? over 24h now, what kind of customer service is that? simple question about baggage that we cant seem to get a straight answer on."
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: BAGGAGE_ISSUES, CUSTOMER_SERVICE_COMPLAINT, GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #05 [Example #20] (Difficulty: medium)
+  - Ground Truth Intent : REFUNDS_AND_PAYMENTS
+  - Predicted Intent    : BAGGAGE_ISSUES
+  - Candidate Heuristic : BAGGAGE_ISSUES
+  - Customer Message    : "@AmericanAir - Soshana in Toronto said checked bag payments covered both legs of flight - but just had to pay again? Had to switch airports but why pay twice?"
+  - Sampling Notes      : Dual-intent overlap: touches both BAGGAGE_ISSUES and REFUNDS_AND_PAYMENTS.
+------------------------------------------------------------
+Error #06 [Example #23] (Difficulty: hard)
+  - Ground Truth Intent : BOOKING_AND_RESERVATIONS
+  - Predicted Intent    : CUSTOMER_SERVICE_COMPLAINT
+  - Candidate Heuristic : BOOKING_AND_RESERVATIONS
+  - Customer Message    : "Thank you 🙏Titoana at customer service in Phoenix for booking me to Philly! @AmericanAir it’s soooo appreciated!!! (Yeah I took a selfie) https://t.co/X84ekzHun4"
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: BOOKING_AND_RESERVATIONS, CUSTOMER_SERVICE_COMPLAINT, GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #07 [Example #24] (Difficulty: medium)
+  - Ground Truth Intent : REFUNDS_AND_PAYMENTS
+  - Predicted Intent    : REBOOKING_AND_CHANGES
+  - Candidate Heuristic : BOOKING_AND_RESERVATIONS
+  - Preceding Context   : [1] Customer (269886): "Love checking in for my flight only to find that my trip has been canceled. Is this a normal bus...
+  - Customer Message    : "@AmericanAir dm sent re: re booking"
+  - Sampling Notes      : Short mid-thread customer follow-up; context is essential to disambiguate.
+------------------------------------------------------------
+Error #08 [Example #26] (Difficulty: easy)
+  - Ground Truth Intent : BOOKING_AND_RESERVATIONS
+  - Predicted Intent    : REBOOKING_AND_CHANGES
+  - Candidate Heuristic : BOOKING_AND_RESERVATIONS
+  - Preceding Context   : [1] Customer (327197): "Missed my flight. Lady at CS desk for @AlaskaAir couldn’t get me to IAH until 4am tomorrow. Luck...
+  - Customer Message    : "@AmericanAir You have no idea! I somehow booked a flight to IAH for SUNDAY rather than today. Kim at the counter is part angel &amp; part ninja so now on ✈️"
+  - Sampling Notes      : Unambiguous single-intent signal matching BOOKING_AND_RESERVATIONS.
+------------------------------------------------------------
+Error #09 [Example #29] (Difficulty: easy)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : BOOKING_AND_RESERVATIONS
+  - Preceding Context   : [1] Customer (487048): "Dirty and broken. @AmericanAir, inherit your fleet from the Soviet Union? Bathroom lock busted t...
+  - Customer Message    : "@AmericanAir You're the airline; you have my record locator. I shouldn't have to do extra work so you can do your job. One more reason I'm loyal @Delta."
+  - Sampling Notes      : Unambiguous single-intent signal matching BOOKING_AND_RESERVATIONS.
+------------------------------------------------------------
+Error #10 [Example #31] (Difficulty: medium)
+  - Ground Truth Intent : BOOKING_AND_RESERVATIONS
+  - Predicted Intent    : LOYALTY_AND_AADVANTAGE
+  - Candidate Heuristic : BOOKING_AND_RESERVATIONS
+  - Preceding Context   : [1] Customer (538179): "@AmericanAir spent 2hrs tday trying to book award travel on https://t.co/ozNCqjiANH, what is it ...
+  - Customer Message    : "@AmericanAir Totes know that( close to 2m miles flown w u)But your site shows it available until u continue to book final itinerary-bad UX or biz logic"
+  - Sampling Notes      : Dual-intent overlap: touches both BOOKING_AND_RESERVATIONS and LOYALTY_AND_AADVANTAGE.
+------------------------------------------------------------
+Error #11 [Example #32] (Difficulty: easy)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : LOYALTY_AND_AADVANTAGE
+  - Candidate Heuristic : BOOKING_AND_RESERVATIONS
+  - Preceding Context   : [1] Customer (246155): "@AmericanAir Unbelievably bad CS on my last two calls. It’s like nobody at the EXP desk cares ab...
+  - Customer Message    : "@AmericanAir I would hope so because I purposely booked this connecting flight just to be on AA when I could have flown Direct on any other airline. DM"
+  - Sampling Notes      : Unambiguous single-intent signal matching BOOKING_AND_RESERVATIONS.
+------------------------------------------------------------
+Error #12 [Example #38] (Difficulty: easy)
+  - Ground Truth Intent : REFUNDS_AND_PAYMENTS
+  - Predicted Intent    : BOOKING_AND_RESERVATIONS
+  - Candidate Heuristic : BOOKING_AND_RESERVATIONS
+  - Preceding Context   : [1] Customer (776091): "Why can't I cancel @AmericanAir flight if I got the insurance?!?! Isn't the point of the insuran...
+  - Customer Message    : "@AmericanAir Forget it. I booked thru Expedia &amp; just looked up and not even going to war is covered so I'm shit out of luck #NotSoAmerican"
+  - Sampling Notes      : Unambiguous single-intent signal matching BOOKING_AND_RESERVATIONS.
+------------------------------------------------------------
+Error #13 [Example #40] (Difficulty: medium)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : BOOKING_AND_RESERVATIONS
+  - Candidate Heuristic : BOOKING_AND_RESERVATIONS
+  - Customer Message    : "@AmericanAir so I've done all u asked and no one is responding .. nice way to treat frequent costumer and I have another flight book with guys for the 5th..some loyalty exchange ..smh"
+  - Sampling Notes      : Dual-intent overlap: touches both BOOKING_AND_RESERVATIONS and LOYALTY_AND_AADVANTAGE.
+------------------------------------------------------------
+Error #14 [Example #41] (Difficulty: hard)
+  - Ground Truth Intent : LOYALTY_AND_AADVANTAGE
+  - Predicted Intent    : CHECKIN_AND_BOARDING
+  - Candidate Heuristic : CHECKIN_AND_BOARDING
+  - Customer Message    : "@AmericanAir @117157 thank you for convincing me to canx this card. No priority boarding with a platinum card? Useless."
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: CHECKIN_AND_BOARDING, LOYALTY_AND_AADVANTAGE, GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #15 [Example #43] (Difficulty: hard)
+  - Ground Truth Intent : CHECKIN_AND_BOARDING
+  - Predicted Intent    : CUSTOMER_SERVICE_COMPLAINT
+  - Candidate Heuristic : CHECKIN_AND_BOARDING
+  - Customer Message    : "Thanks for the great customer service @AmericanAir waited for an hour and half at the check in desk only to miss my flight#AmericanAirlines"
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: CHECKIN_AND_BOARDING, CUSTOMER_SERVICE_COMPLAINT, GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #16 [Example #44] (Difficulty: hard)
+  - Ground Truth Intent : CHECKIN_AND_BOARDING
+  - Predicted Intent    : REBOOKING_AND_CHANGES
+  - Candidate Heuristic : CHECKIN_AND_BOARDING
+  - Preceding Context   : [1] Customer (299230): "The only bad thing about red eyes is what the hell to do all day/night. @AmericanAir any way to ...
+  - Customer Message    : "@AmericanAir Big thank you to Ricardo (I think) at PHX check in tonight for being patient &amp; helping with the unhelpful checkin kiosks."
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: CHECKIN_AND_BOARDING, CUSTOMER_SERVICE_COMPLAINT, GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #17 [Example #45] (Difficulty: easy)
+  - Ground Truth Intent : CHECKIN_AND_BOARDING
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : CHECKIN_AND_BOARDING
+  - Customer Message    : ".@343753 team about to board this @AmericanAir puddle jumper out of @280314 for a gig in the Great American West - here we go! https://t.co/TQC5aFNozX"
+  - Sampling Notes      : Unambiguous single-intent signal matching CHECKIN_AND_BOARDING.
+------------------------------------------------------------
+Error #18 [Example #50] (Difficulty: medium)
+  - Ground Truth Intent : CHECKIN_AND_BOARDING
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : CHECKIN_AND_BOARDING
+  - Preceding Context   : [1] Customer (494094): "@AmericanAir so now the priority lanes at DFW are gone??" | [2] Customer (494094): "@AmericanAir...
+  - Customer Message    : "@261651 @AmericanAir Yep, completely dodged the question.  This morning no priorty lane at DFW.  This with the disaster that the new illogical TSA process is.."
+  - Sampling Notes      : Dual-intent overlap: touches both CHECKIN_AND_BOARDING and GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #19 [Example #53] (Difficulty: medium)
+  - Ground Truth Intent : CHECKIN_AND_BOARDING
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : CHECKIN_AND_BOARDING
+  - Customer Message    : "Boarded flight #2 of the day on @americanair ... thanks for taking such great care of me."
+  - Sampling Notes      : Dual-intent overlap: touches both CHECKIN_AND_BOARDING and GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #20 [Example #59] (Difficulty: easy)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : CHECKIN_AND_BOARDING
+  - Customer Message    : "@AmericanAir Just last week I wrote you on 2 outstanding employees. Today my feeling of anger and disgust at your service plumbed new depths at checkin at Greenville sc. I will be writing tomo and will want a follow up."
+  - Sampling Notes      : Unambiguous single-intent signal matching CHECKIN_AND_BOARDING.
+------------------------------------------------------------
+Error #21 [Example #61] (Difficulty: medium)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : CUSTOMER_SERVICE_COMPLAINT
+  - Customer Message    : "Thanks @AmericanAir. Again. Then screwing me over on the 2nd flight because your agent was inept. Awesome. https://t.co/8ciUIpqA3u"
+  - Sampling Notes      : Dual-intent overlap: touches both CUSTOMER_SERVICE_COMPLAINT and GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #22 [Example #62] (Difficulty: easy)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : CUSTOMER_SERVICE_COMPLAINT
+  - Customer Message    : "This woman has managed to destroy a light on @AmericanAir 1978. She’s going to force us to turn around if she doesn’t stop with this. She quizzed attendant about safety manual too. https://t.co/az4Ea53uXD"
+  - Sampling Notes      : Unambiguous single-intent signal matching CUSTOMER_SERVICE_COMPLAINT.
+------------------------------------------------------------
+Error #23 [Example #67] (Difficulty: medium)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : CUSTOMER_SERVICE_COMPLAINT
+  - Customer Message    : "Thank you, super-helpful, gray-haired, male @AmericanAir ticket agent for your help and professionalism this morning! I made my flight!"
+  - Sampling Notes      : Dual-intent overlap: touches both CUSTOMER_SERVICE_COMPLAINT and GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #24 [Example #85] (Difficulty: hard)
+  - Ground Truth Intent : FLIGHT_DISRUPTION
+  - Predicted Intent    : LOYALTY_AND_AADVANTAGE
+  - Candidate Heuristic : FLIGHT_DISRUPTION
+  - Customer Message    : "@AmericanAir this is the second time in as many flights with my infant that we have had to deplane due to a mechanical issue not found until everyone has boarded. This is unacceptable. My gold status expires end of year so do I need to switch my allegiance?"
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: FLIGHT_DISRUPTION, CHECKIN_AND_BOARDING, LOYALTY_AND_AADVANTAGE.
+------------------------------------------------------------
+Error #25 [Example #86] (Difficulty: medium)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : BAGGAGE_ISSUES
+  - Candidate Heuristic : FLIGHT_DISRUPTION
+  - Customer Message    : "Hey @AmericanAir when you said my bag wouldn’t fit i quietly said “fuck” and your employee said “watch your language or you’ll be stuck in DC forever” appropriate or????"
+  - Sampling Notes      : Dual-intent overlap: touches both FLIGHT_DISRUPTION and BAGGAGE_ISSUES.
+------------------------------------------------------------
+Error #26 [Example #88] (Difficulty: easy)
+  - Ground Truth Intent : FLIGHT_DISRUPTION
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : FLIGHT_DISRUPTION
+  - Customer Message    : ".@AmericanAir Gonna need a response on this one. What mechanical failure happened on flight 2594 out of SFO?"
+  - Sampling Notes      : Unambiguous single-intent signal matching FLIGHT_DISRUPTION.
+------------------------------------------------------------
+Error #27 [Example #90] (Difficulty: hard)
+  - Ground Truth Intent : REBOOKING_AND_CHANGES
+  - Predicted Intent    : REFUNDS_AND_PAYMENTS
+  - Candidate Heuristic : FLIGHT_DISRUPTION
+  - Customer Message    : "Shoutout to @AmericanAir for absolutely refusing to work with an extremely loyal customer all because I need to cancel a flight w/o refund."
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: FLIGHT_DISRUPTION, REFUNDS_AND_PAYMENTS, GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #28 [Example #92] (Difficulty: medium)
+  - Ground Truth Intent : FLIGHT_DISRUPTION
+  - Predicted Intent    : REBOOKING_AND_CHANGES
+  - Candidate Heuristic : FLIGHT_DISRUPTION
+  - Preceding Context   : [1] Customer (437320): "Dear @AmericanAir, I seriously dislike you right now. We are no longer friends. 😡 https://t.co/h...
+  - Customer Message    : "@AmericanAir Delayed on the runway. Ugh."
+  - Sampling Notes      : Short mid-thread customer follow-up; context is essential to disambiguate.
+------------------------------------------------------------
+Error #29 [Example #96] (Difficulty: easy)
+  - Ground Truth Intent : FLIGHT_DISRUPTION
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : FLIGHT_DISRUPTION
+  - Preceding Context   : [1] Customer (443120): "DCA &gt; MIA on @AmericanAir https://t.co/x34QxCPIlP" | [2] AmericanAir: "@443120 It's great to ...
+  - Customer Message    : "@AmericanAir I will once it takes off. Flight went mechanical! #aadelays"
+  - Sampling Notes      : Unambiguous single-intent signal matching FLIGHT_DISRUPTION.
+------------------------------------------------------------
+Error #30 [Example #98] (Difficulty: easy)
+  - Ground Truth Intent : FLIGHT_DISRUPTION
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : FLIGHT_DISRUPTION
+  - Customer Message    : "@685664 @AmericanAir @AmericanAir, get involved and offer direct assistance. Don’t put the burden on weary, stranded, and devastated customers to work it out."
+  - Sampling Notes      : Unambiguous single-intent signal matching FLIGHT_DISRUPTION.
+------------------------------------------------------------
+Error #31 [Example #103] (Difficulty: medium)
+  - Ground Truth Intent : GENERAL_INQUIRY_AND_OTHER
+  - Predicted Intent    : BAGGAGE_ISSUES
+  - Candidate Heuristic : GENERAL_INQUIRY_AND_OTHER
+  - Preceding Context   : [1] Customer (171937): "So hubs had us all confused. Looks like we're flying @AmericanAir tomorrow! Now to figure out th...
+  - Customer Message    : "@AmericanAir Thank you!!♥️"
+  - Sampling Notes      : Short mid-thread customer follow-up; context is essential to disambiguate.
+------------------------------------------------------------
+Error #32 [Example #107] (Difficulty: medium)
+  - Ground Truth Intent : BAGGAGE_ISSUES
+  - Predicted Intent    : CHECKIN_AND_BOARDING
+  - Candidate Heuristic : GENERAL_INQUIRY_AND_OTHER
+  - Preceding Context   : [1] Customer (357056): "@AmericanAir the kiosk didn't print me a receipt for my checked bag, &amp; gate agent can't prin...
+  - Customer Message    : "@AmericanAir DM sent, thank you!"
+  - Sampling Notes      : Short mid-thread customer follow-up; context is essential to disambiguate.
+------------------------------------------------------------
+Error #33 [Example #108] (Difficulty: medium)
+  - Ground Truth Intent : BAGGAGE_ISSUES
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : GENERAL_INQUIRY_AND_OTHER
+  - Preceding Context   : [1] Customer (418150): "More issues! Hopefully this does not affect boarding my connecting flight. Currently waiting in ...
+  - Customer Message    : "@AmericanAir I made it! Thanks!!!"
+  - Sampling Notes      : Short mid-thread customer follow-up; context is essential to disambiguate.
+------------------------------------------------------------
+Error #34 [Example #109] (Difficulty: easy)
+  - Ground Truth Intent : FLIGHT_DISRUPTION
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : GENERAL_INQUIRY_AND_OTHER
+  - Preceding Context   : [1] Customer (433858): "Thanks @AmericanAir now taxiid back to terminal at MSP for 3rd time. Got on at 5:30. Supposed to...
+  - Customer Message    : "@AmericanAir I was supposed to be in Tulsa about 20 minutes ago"
+  - Sampling Notes      : Clear general/conversational inquiry; no specific operational issue keyword.
+------------------------------------------------------------
+Error #35 [Example #112] (Difficulty: medium)
+  - Ground Truth Intent : GENERAL_INQUIRY_AND_OTHER
+  - Predicted Intent    : BAGGAGE_ISSUES
+  - Candidate Heuristic : GENERAL_INQUIRY_AND_OTHER
+  - Preceding Context   : [1] Customer (349709): "@AmericanAir how many pieces of hand &amp; hold baggage can we bring on flight we have booked fr...
+  - Customer Message    : "@AmericanAir Thank you!"
+  - Sampling Notes      : Short mid-thread customer follow-up; context is essential to disambiguate.
+------------------------------------------------------------
+Error #36 [Example #113] (Difficulty: easy)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : BOOKING_AND_RESERVATIONS
+  - Candidate Heuristic : GENERAL_INQUIRY_AND_OTHER
+  - Preceding Context   : [1] Customer (666654): "@AmericanAir I'm booked on flight 730 but told I have to pay, even though I already bought the t...
+  - Customer Message    : "@AmericanAir Met you in DM, please answer"
+  - Sampling Notes      : Clear general/conversational inquiry; no specific operational issue keyword.
+------------------------------------------------------------
+Error #37 [Example #120] (Difficulty: easy)
+  - Ground Truth Intent : FLIGHT_DISRUPTION
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : GENERAL_INQUIRY_AND_OTHER
+  - Preceding Context   : [1] Customer (817125): "Hey @AmericanAir - trying to fly IND-DCA aa4255. Flight keeps delaying. Can you give me update? ...
+  - Customer Message    : "@AmericanAir Literally took you 8 minutes to not make that promise. Bravo @AmericanAir! Departure now 7p. Maybe?"
+  - Sampling Notes      : Clear general/conversational inquiry; no specific operational issue keyword.
+------------------------------------------------------------
+Error #38 [Example #123] (Difficulty: hard)
+  - Ground Truth Intent : LOYALTY_AND_AADVANTAGE
+  - Predicted Intent    : CHECKIN_AND_BOARDING
+  - Candidate Heuristic : LOYALTY_AND_AADVANTAGE
+  - Customer Message    : "@AmericanAir you gotta love it when you receive EXCELLENT customer service at the airport!!! I want to give a huge shoutout to Gabby DCA ATO at the priority gate @133384 Thank you Gabby for checking us in AND for helping us find our miles 🙌🏾🙌🏾. #DCA #AmericanAirlines"
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: LOYALTY_AND_AADVANTAGE, CUSTOMER_SERVICE_COMPLAINT, GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #39 [Example #128] (Difficulty: easy)
+  - Ground Truth Intent : LOYALTY_AND_AADVANTAGE
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : LOYALTY_AND_AADVANTAGE
+  - Customer Message    : "Flying @AmericanAir today.  Ticket was less than half the price of @Delta.  My 18 years loyalty with #Delta made no dif. to price.  ✈️"
+  - Sampling Notes      : Unambiguous single-intent signal matching LOYALTY_AND_AADVANTAGE.
+------------------------------------------------------------
+Error #40 [Example #130] (Difficulty: easy)
+  - Ground Truth Intent : LOYALTY_AND_AADVANTAGE
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : LOYALTY_AND_AADVANTAGE
+  - Customer Message    : "This is the @americanair way. Loyalty doesn't matter, just $. Plan/buy ticket early &amp; get you get this https://t.co/Tno3b6RBRm"
+  - Sampling Notes      : Unambiguous single-intent signal matching LOYALTY_AND_AADVANTAGE.
+------------------------------------------------------------
+Error #41 [Example #131] (Difficulty: easy)
+  - Ground Truth Intent : LOYALTY_AND_AADVANTAGE
+  - Predicted Intent    : CHECKIN_AND_BOARDING
+  - Candidate Heuristic : LOYALTY_AND_AADVANTAGE
+  - Preceding Context   : [1] Customer (159546): "@AmericanAir when you flight business from sfo to bcn via jfk and they took off without you. whi...
+  - Customer Message    : "@AmericanAir Learn from your partners.  Its no so complex. When you fligth bussines and are gold for oneworld, you expect more for the partners you use https://t.co/Yx68j9CXSm"
+  - Sampling Notes      : Unambiguous single-intent signal matching LOYALTY_AND_AADVANTAGE.
+------------------------------------------------------------
+Error #42 [Example #136] (Difficulty: hard)
+  - Ground Truth Intent : GENERAL_INQUIRY_AND_OTHER
+  - Predicted Intent    : CUSTOMER_SERVICE_COMPLAINT
+  - Candidate Heuristic : LOYALTY_AND_AADVANTAGE
+  - Customer Message    : "@AmericanAir customer service did a great job working with me to adjust my travel plans. I know it’s not an easy job taking care of travelers 24/7 but it’s worth the recognition. #airlines #travel #goodservice #aadvantage"
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: LOYALTY_AND_AADVANTAGE, CUSTOMER_SERVICE_COMPLAINT, GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #43 [Example #141] (Difficulty: hard)
+  - Ground Truth Intent : REBOOKING_AND_CHANGES
+  - Predicted Intent    : CUSTOMER_SERVICE_COMPLAINT
+  - Candidate Heuristic : REBOOKING_AND_CHANGES
+  - Preceding Context   : [1] Customer (192034): "@AmericanAir Your airline sucks. Your customer service sucks. Your understaffing at DCA sucks. Y...
+  - Customer Message    : "@AmericanAir 1.5 hours early at DCA. 15 mins bag check kiosk, told need to change flight, pay $75. 15 mins at resolution. Escorted to incorrect gate"
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: REBOOKING_AND_CHANGES, BAGGAGE_ISSUES, REFUNDS_AND_PAYMENTS, CHECKIN_AND_BOARDING.
+------------------------------------------------------------
+Error #44 [Example #143] (Difficulty: easy)
+  - Ground Truth Intent : REBOOKING_AND_CHANGES
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : REBOOKING_AND_CHANGES
+  - Customer Message    : "So @AmericanAir makes me miss my connection and they won't even let me wait the 6hr bump in the AAclub? Wouldn't happen on @SouthwestAir"
+  - Sampling Notes      : Unambiguous single-intent signal matching REBOOKING_AND_CHANGES.
+------------------------------------------------------------
+Error #45 [Example #145] (Difficulty: easy)
+  - Ground Truth Intent : REBOOKING_AND_CHANGES
+  - Predicted Intent    : CHECKIN_AND_BOARDING
+  - Candidate Heuristic : REBOOKING_AND_CHANGES
+  - Preceding Context   : [1] Customer (347282): "@AmericanAir what to do when late checking in for a flight n there's no ticket agents in sight? ...
+  - Customer Message    : "@AmericanAir You're clearly missing the point - I needed standby assistance and no one was available at the airport yesterday."
+  - Sampling Notes      : Unambiguous single-intent signal matching REBOOKING_AND_CHANGES.
+------------------------------------------------------------
+Error #46 [Example #147] (Difficulty: medium)
+  - Ground Truth Intent : REBOOKING_AND_CHANGES
+  - Predicted Intent    : SEATS_AND_CABIN
+  - Candidate Heuristic : REBOOKING_AND_CHANGES
+  - Customer Message    : "AA2300 DEN-ORD on a Super 80. Got standby in seat 33A. Happy to be headed home!!! I get the great view!! 👍@AmericanAir @435728 @435729 https://t.co/wgYCHzXhkv"
+  - Sampling Notes      : Dual-intent overlap: touches both REBOOKING_AND_CHANGES and SEATS_AND_CABIN.
+------------------------------------------------------------
+Error #47 [Example #154] (Difficulty: hard)
+  - Ground Truth Intent : REBOOKING_AND_CHANGES
+  - Predicted Intent    : REFUNDS_AND_PAYMENTS
+  - Candidate Heuristic : REBOOKING_AND_CHANGES
+  - Customer Message    : "Don’t bother paying to choose seats on @AmericanAir - they can rebook you and split up your party and they don’t even care or refund the fee"
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: REBOOKING_AND_CHANGES, SEATS_AND_CABIN, REFUNDS_AND_PAYMENTS.
+------------------------------------------------------------
+Error #48 [Example #159] (Difficulty: medium)
+  - Ground Truth Intent : REFUNDS_AND_PAYMENTS
+  - Predicted Intent    : REBOOKING_AND_CHANGES
+  - Candidate Heuristic : REBOOKING_AND_CHANGES
+  - Preceding Context   : [1] Customer (780865): "I am done with @AmericanAir I am over the delayed and canceled flights." | [2] AmericanAir: "@78...
+  - Customer Message    : "@AmericanAir It’s an extra whole day! I don’t need help rebooking what I need is a credit or something to make up for this"
+  - Sampling Notes      : Dual-intent overlap: touches both REBOOKING_AND_CHANGES and REFUNDS_AND_PAYMENTS.
+------------------------------------------------------------
+Error #49 [Example #163] (Difficulty: easy)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : REFUNDS_AND_PAYMENTS
+  - Candidate Heuristic : REFUNDS_AND_PAYMENTS
+  - Preceding Context   : [1] Customer (164669): "@AmericanAir Cannot believe the service I just had at the Charlotte,NC airport!! Flight got canc...
+  - Customer Message    : "@AmericanAir My fiancé is flying as well and is an American Airlines Credit Card Member and we both were just were ignored for our issues of having to miss work tomorrow!"
+  - Sampling Notes      : Unambiguous single-intent signal matching REFUNDS_AND_PAYMENTS.
+------------------------------------------------------------
+Error #50 [Example #164] (Difficulty: easy)
+  - Ground Truth Intent : REFUNDS_AND_PAYMENTS
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : REFUNDS_AND_PAYMENTS
+  - Preceding Context   : [1] Customer (116949): "@AmericanAir unaccompanied minor fees at time of purchase or time of flight?" | [2] AmericanAir:...
+  - Customer Message    : "@AmericanAir Can I buy her ticket online and then pay the fee the day of travel?"
+  - Sampling Notes      : Unambiguous single-intent signal matching REFUNDS_AND_PAYMENTS.
+------------------------------------------------------------
+Error #51 [Example #165] (Difficulty: medium)
+  - Ground Truth Intent : REFUNDS_AND_PAYMENTS
+  - Predicted Intent    : REBOOKING_AND_CHANGES
+  - Candidate Heuristic : REFUNDS_AND_PAYMENTS
+  - Customer Message    : "After I was forced to pay a fee to switch flights when I had ample time to board the original. @AmericanAir"
+  - Sampling Notes      : Dual-intent overlap: touches both REFUNDS_AND_PAYMENTS and CHECKIN_AND_BOARDING.
+------------------------------------------------------------
+Error #52 [Example #170] (Difficulty: medium)
+  - Ground Truth Intent : REFUNDS_AND_PAYMENTS
+  - Predicted Intent    : CUSTOMER_SERVICE_COMPLAINT
+  - Candidate Heuristic : REFUNDS_AND_PAYMENTS
+  - Preceding Context   : [1] Customer (454984): "WORST AIRLINE EVER.  Every time, every single time.  @AmericanAir" | [2] AmericanAir: "@454984 W...
+  - Customer Message    : "@AmericanAir Couldn’t check in to the new flight to be told I have to pay for the change.  Not once did anyone mention that last night."
+  - Sampling Notes      : Dual-intent overlap: touches both REFUNDS_AND_PAYMENTS and CHECKIN_AND_BOARDING.
+------------------------------------------------------------
+Error #53 [Example #171] (Difficulty: hard)
+  - Ground Truth Intent : CUSTOMER_SERVICE_COMPLAINT
+  - Predicted Intent    : BAGGAGE_ISSUES
+  - Candidate Heuristic : REFUNDS_AND_PAYMENTS
+  - Preceding Context   : [1] Customer (382633): "@AmericanAir how do I get a receipt for checked bags?  Is there a fee for that, too?" | [2] Amer...
+  - Customer Message    : "@AmericanAir Thanks, but I have the receipt. Only took a quick 25 minutes on hold with your customer service number! 👏👏👏 you guys are the best."
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: REFUNDS_AND_PAYMENTS, CUSTOMER_SERVICE_COMPLAINT, GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #54 [Example #175] (Difficulty: medium)
+  - Ground Truth Intent : REFUNDS_AND_PAYMENTS
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : REFUNDS_AND_PAYMENTS
+  - Preceding Context   : [1] Customer (554958): "@AmericanAir wow so I was charged additional $200. What a rip off made a simple mistake in the l...
+  - Customer Message    : "@AmericanAir They haven't sent me the new ticket yet to DM Supervisor claim  that this is your policy and this is an exception charge me $ 200."
+  - Sampling Notes      : Dual-intent overlap: touches both REFUNDS_AND_PAYMENTS and CUSTOMER_SERVICE_COMPLAINT.
+------------------------------------------------------------
+Error #55 [Example #176] (Difficulty: medium)
+  - Ground Truth Intent : CHECKIN_AND_BOARDING
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : REFUNDS_AND_PAYMENTS
+  - Preceding Context   : [1] Customer (641034): "@AmericanAir Hey just sending some good vibes to AA today. Have to fly with guitars to gigs in A...
+  - Customer Message    : "@AmericanAir Ha! it’s tenuous. The first big airline to offer pro musicians guaranteed instrument boarding/overhead storage for a reasonable fee will make $ and earn loyal, creative, and sometimes famous customers! Work it out with @86645 !"
+  - Sampling Notes      : Dual-intent overlap: touches both REFUNDS_AND_PAYMENTS and CHECKIN_AND_BOARDING.
+------------------------------------------------------------
+Error #56 [Example #177] (Difficulty: medium)
+  - Ground Truth Intent : REFUNDS_AND_PAYMENTS
+  - Predicted Intent    : CUSTOMER_SERVICE_COMPLAINT
+  - Candidate Heuristic : REFUNDS_AND_PAYMENTS
+  - Preceding Context   : [1] Customer (357817): "@AmericanAir what's wrong with you customer service ?? Soo disappointed" | [2] AmericanAir: "@35...
+  - Customer Message    : "@AmericanAir Very nice tweet! Why this customer service can't be seen while talking to an agent!? This last one was rude and not very helpful. I need to know about a refund"
+  - Sampling Notes      : Dual-intent overlap: touches both REFUNDS_AND_PAYMENTS and CUSTOMER_SERVICE_COMPLAINT.
+------------------------------------------------------------
+Error #57 [Example #184] (Difficulty: medium)
+  - Ground Truth Intent : SEATS_AND_CABIN
+  - Predicted Intent    : LOYALTY_AND_AADVANTAGE
+  - Candidate Heuristic : SEATS_AND_CABIN
+  - Customer Message    : "@AmericanAir Having some issues with changing seats on my upcoming trip. My status is giving me the option, but I keep getting an error msg"
+  - Sampling Notes      : Dual-intent overlap: touches both SEATS_AND_CABIN and LOYALTY_AND_AADVANTAGE.
+------------------------------------------------------------
+Error #58 [Example #188] (Difficulty: medium)
+  - Ground Truth Intent : GENERAL_INQUIRY_AND_OTHER
+  - Predicted Intent    : SEATS_AND_CABIN
+  - Candidate Heuristic : SEATS_AND_CABIN
+  - Preceding Context   : [1] Customer (393082): "@AmericanAir flight 315 confirmed seat 4achecked now no record and no seat need help" | [2] Amer...
+  - Customer Message    : "@AmericanAir No. They got finally resolved.  They said the record disappeared and gave my seat away.  They moved the person that was in my seat. Thanks"
+  - Sampling Notes      : Dual-intent overlap: touches both SEATS_AND_CABIN and GENERAL_INQUIRY_AND_OTHER.
+------------------------------------------------------------
+Error #59 [Example #191] (Difficulty: easy)
+  - Ground Truth Intent : SEATS_AND_CABIN
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : SEATS_AND_CABIN
+  - Customer Message    : "@AmericanAir is it customary for your attendants to leave ice in the aisle after they drop it? https://t.co/K9o2ro3hWI"
+  - Sampling Notes      : Unambiguous single-intent signal matching SEATS_AND_CABIN.
+------------------------------------------------------------
+Error #60 [Example #192] (Difficulty: easy)
+  - Ground Truth Intent : REFUNDS_AND_PAYMENTS
+  - Predicted Intent    : GENERAL_INQUIRY_AND_OTHER
+  - Candidate Heuristic : SEATS_AND_CABIN
+  - Customer Message    : "@AmericanAir $218 upcharge for "main cabin" (or no carry-on)...on a $108 flight? C'mon, AA. These shenanigans are why people hate to fly."
+  - Sampling Notes      : Unambiguous single-intent signal matching SEATS_AND_CABIN.
+------------------------------------------------------------
+Error #61 [Example #193] (Difficulty: medium)
+  - Ground Truth Intent : REFUNDS_AND_PAYMENTS
+  - Predicted Intent    : SEATS_AND_CABIN
+  - Candidate Heuristic : SEATS_AND_CABIN
+  - Customer Message    : "@Americanair About to be on a 4- hour flight - AA2642 seat 17F. Any chance I can get some kind of credit for this? https://t.co/B3AKGZ1btL"
+  - Sampling Notes      : Dual-intent overlap: touches both SEATS_AND_CABIN and REFUNDS_AND_PAYMENTS.
+------------------------------------------------------------
+Error #62 [Example #194] (Difficulty: hard)
+  - Ground Truth Intent : SEATS_AND_CABIN
+  - Predicted Intent    : REFUNDS_AND_PAYMENTS
+  - Candidate Heuristic : SEATS_AND_CABIN
+  - Customer Message    : "@AmericanAir you bumped me from a seat I paid extra for to a seat in the back of the plane. Customer service won't give a refund. Flt4744"
+  - Sampling Notes      : Multi-intent ambiguity spanning 3+ domains: SEATS_AND_CABIN, REFUNDS_AND_PAYMENTS, CUSTOMER_SERVICE_COMPLAINT.
+------------------------------------------------------------
+Error #63 [Example #195] (Difficulty: easy)
+  - Ground Truth Intent : BAGGAGE_ISSUES
+  - Predicted Intent    : SEATS_AND_CABIN
+  - Candidate Heuristic : SEATS_AND_CABIN
+  - Customer Message    : "@AmericanAir I left my hat on flight AA 497 seat 12f in Phoenix - can you help me get it back? I'm scared it's halfway to San Jose by now!"
+  - Sampling Notes      : Unambiguous single-intent signal matching SEATS_AND_CABIN.
+------------------------------------------------------------

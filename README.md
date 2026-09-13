@@ -209,7 +209,7 @@ Rather than concealing shortcomings, a production-grade support system must expl
 
 ### Failure Mode 5: Inability to Mutate Live Transactional State
 - **Root Cause:** The prototype has no access to live reservation/PNR systems, so transactional requests (rebookings, refunds, boarding pass issuance) are escalated to human agents.
-- **Mitigation:** 100% of refund requests, live rebooking demands, and physical baggage tracing inquiries are explicitly gated behind human escalation with structured DM record locator collection.
+- **Mitigation:** All rebooking inquiries and 96% of refund/payment inquiries are routed to human specialists.
 
 ---
 
@@ -220,7 +220,7 @@ A headline intent accuracy of **83.00%** and **0/200 unsupported claims** looks 
 1. **Final Intent Accuracy is Inherited from Baseline 1:**
    The final agent does not improve intent classification over Baseline 1 (retaining the identical 83.00% accuracy and 82.11% Macro-F1). Its core contribution is historical evidence retrieval, grounded response generation, and risk-sensitive routing.
 2. **High Escalation Rate (80.5%) Shields Generation from Scrutiny:**
-   Our 0/200 unsupported claim rate is largely achieved because the escalation engine diverts 80.5% (161/200) of queries to human specialists. While this ensures passenger safety and prevents regulatory liability, it also means the agent only auto-handles 19.5% (39/200) of customer volume. Calling the agent "83% accurate" obscures the operational reality that human agents must still handle the vast majority of conversations.
+   Our 0/200 unsupported claim rate is largely achieved because the escalation engine diverts 80.5% (161/200) of queries to human specialists. While this conservative policy reduces the risk of unsupported customer-facing claims, it also means the agent only auto-handles 19.5% (39/200) of customer volume. Calling the agent "83% accurate" obscures the operational reality that human agents must still handle the vast majority of conversations.
 3. **Automated Grounding Check is Narrow, Not Proof of Zero Hallucination:**
    The 0/200 unsupported claim result comes from a deterministic regex check for ungrounded dollar amounts and timeline promises. It is an automated sanity filter, NOT proof that responses contain zero factual errors, out-of-date information, or subtle misdirections.
 4. **Response Helpfulness and Grounding are Protected by Conservative Escalation:**

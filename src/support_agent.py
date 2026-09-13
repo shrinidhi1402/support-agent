@@ -413,7 +413,7 @@ class SupportAgent:
         top1_hist_intent = retrieval_intents[0] if retrieval_intents else None
 
         if top1_sim >= 0.35 and top1_hist_intent == intent:
-            return "AUTO_HANDLE", f"AUTO_HANDLE — Strong historical evidence (similarity {top1_sim:.4f}) aligns with verified policy for {intent}."
+            return "AUTO_HANDLE", f"AUTO_HANDLE — Strong historical evidence (similarity {top1_sim:.4f}) aligns with historical precedent for {intent}."
 
         if top1_sim >= 0.28 and top1_hist_intent == intent:
             return "AUTO_HANDLE", f"AUTO_HANDLE — Retrieved evidence (similarity {top1_sim:.4f}) provides sufficient historical guidance for a standard public response."

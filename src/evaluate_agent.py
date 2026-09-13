@@ -9,8 +9,8 @@ Evaluates the complete SupportAgent pipeline across all 200 hand-labelled golden
    - Helpfulness (1-5)
    - Grounding / Factuality (1-5)
    - Unsupported Claims Flag (Binary 0/1)
-   - Escalation Appropriateness (Binary 0/1)
-4. Human Validation Subset (40 stratified examples) with Cohen's Kappa & Agreement Rate
+   - Heuristic Policy Compliance (Binary 0/1)
+4. Human Validation Subset (40 stratified examples) with Agreement Rate (Cohen's Kappa N/A)
 5. Real Failure Mode Analysis (Top 5 failure modes with concrete examples)
 6. Critical Analysis: "What is Misleading About My Headline Number?"
 
@@ -466,13 +466,7 @@ def run_evaluation(
     judge_esc_ratings = human_audit_df["judge_appropriate_escalation"].tolist()
 
     exact_agreement = sum(h == j for h, j in zip(human_esc_ratings, judge_esc_ratings)) / len(human_esc_ratings) * 100
-    if len(set(human_esc_ratings)) <= 1 and human_esc_ratings == judge_esc_ratings:
-        kappa = 1.0
-    else:
-        try:
-            kappa = cohen_kappa_score(human_esc_ratings, judge_esc_ratings, labels=[0, 1])
-        except Exception:
-            kappa = 1.0
+    kappa_str = "N/A — undefined because the 40-example audit subset contains only one class and therefore has zero marginal variance."
 
     mean_human_rel = np.mean([human_labels[eid]["human_relevance"] for eid in human_audit_df["example_id"]])
     mean_judge_rel_subset = human_audit_df["judge_relevance"].mean()
@@ -507,17 +501,19 @@ def run_evaluation(
 
     report.append("1. EXECUTIVE SUMMARY & HEADLINE METRICS")
     report.append("-" * 80)
-    report.append(f"Intent Classification Accuracy : {acc * 100:.2f}% ({results_df['intent_correct'].sum()}/200)")
+    report.append(f"Intent Classification Accuracy : {acc * 100:.2f}% ({results_df['intent_correct'].sum()}/200) [Inherited unchanged from Baseline 1]")
     report.append(f"Intent Macro-F1                : {macro_f1 * 100:.2f}%")
     report.append(f"Intent Weighted-F1             : {weighted_f1 * 100:.2f}%")
     report.append(f"Total Evaluated Interactions   : {total_count}")
     report.append(f"Auto-Handled Responses         : {auto_count} ({auto_pct:.1f}%)")
     report.append(f"Escalated to Human Agent       : {esc_count} ({esc_pct:.1f}%)")
-    report.append(f"Escalation Appropriateness     : {appropriate_esc_rate:.1f}%")
-    report.append(f"Hallucination / Unsupported    : {unsupported_rate:.1f}% (0 out of 200 fabricated)")
+    report.append(f"Heuristic Policy Compliance    : {appropriate_esc_rate:.1f}% (197/200 decisions complied with the automated risk rubric; this is not independent human-labelled routing accuracy)")
+    report.append(f"Unsupported Claims Flag Rate   : 0/200 responses were flagged for unsupported claims by the automated grounding evaluator (this is a deterministic automated check and is NOT proof of zero hallucination)")
     report.append(f"Average Response Relevance     : {mean_rel:.2f} / 5.00")
     report.append(f"Average Response Helpfulness   : {mean_help:.2f} / 5.00")
     report.append(f"Average Fact Grounding         : {mean_ground:.2f} / 5.00")
+    report.append("")
+    report.append("Note: The final agent does not improve intent classification over Baseline 1 (83.00% accuracy, 82.11% Macro-F1); its primary contribution is historical evidence retrieval, grounded response generation, and risk-sensitive routing.")
     report.append("")
 
     report.append("2. INTENT CLASSIFICATION PERFORMANCE BY CATEGORY")
@@ -558,8 +554,8 @@ def run_evaluation(
     report.append("4. HUMAN AUDIT & LLM-AS-JUDGE AGREEMENT (40-EXAMPLE VALIDATION SUBSET)")
     report.append("-" * 80)
     report.append(f"Audit Subset Size           : {len(human_audit_df)} examples (stratified across 10 intents and 3 difficulty tiers)")
-    report.append(f"Exact Agreement Rate        : {exact_agreement:.2f}%")
-    report.append(f"Cohen's Kappa               : {kappa:.4f} (Near-perfect inter-annotator agreement)")
+    report.append(f"Raw Agreement               : {exact_agreement:.2f}% ({sum(h == j for h, j in zip(human_esc_ratings, judge_esc_ratings))}/{len(human_esc_ratings)})")
+    report.append(f"Cohen's Kappa               : {kappa_str}")
     report.append(f"Mean Human Relevance Score  : {mean_human_rel:.2f} / 5.00")
     report.append(f"Mean Judge Relevance Score  : {mean_judge_rel_subset:.2f} / 5.00")
     report.append("")
@@ -606,22 +602,34 @@ def run_evaluation(
 
     # Mode 5
     report.append("FAILURE MODE 5: Inability to Execute Live Transactional State Mutations")
-    report.append("Root Cause: As an external text-based agent without authenticated live Sabre/PNR API connectivity, the agent cannot execute rebookings, process cash refunds, or issue boarding passes directly.")
+    report.append("Root Cause: The prototype has no access to live reservation/PNR systems, so transactional requests (rebookings, refunds, boarding pass issuance) are escalated to human agents.")
     report.append("Mitigation: 100% of refund requests, live rebooking demands, and physical baggage tracing inquiries are explicitly gated behind human escalation with verifiable direct message channels.")
     report.append("")
 
     report.append("6. CRITICAL ANALYSIS: WHAT IS MISLEADING ABOUT MY HEADLINE NUMBER?")
     report.append("-" * 80)
-    report.append("A headline accuracy of 83.00% and 0.0% hallucination rate looks impressive on paper, but would be dangerous if taken at face value by airline operations leaders without understanding three key caveats:")
+    report.append("A headline intent accuracy of 83.00% and 0/200 unsupported claims looks impressive on paper, but would be dangerous if taken at face value by airline operations leaders without understanding seven key caveats:")
     report.append("")
-    report.append("1. High Escalation Rate (60.0%+) Shields the Generation Pipeline from Scrutiny:")
-    report.append("   Our 0% unsupported claim rate is largely achieved because the escalation engine aggressively diverts 60%+ of complex, high-risk, and ambiguous queries to human agents. While this ensures passenger safety and prevents regulatory liability, it also means the agent only auto-handles ~35-40% of customer volume. Calling the agent '83% accurate' obscures the operational reality that human agents must still handle the majority of conversations.")
+    report.append("1. Final Intent Accuracy is Inherited from Baseline 1:")
+    report.append("   The final agent does not improve intent classification over Baseline 1 (retaining the identical 83.00% accuracy and 82.11% Macro-F1). Its core contribution is historical evidence retrieval, grounded response generation, and risk-sensitive routing.")
     report.append("")
-    report.append("2. Golden Set Distribution vs. Real-World Live Twitter Skew:")
-    report.append("   Our 200-example golden set was constructed with deliberate stratification across all 10 intents (including underrepresented intents like LOYALTY and SEATS) to thoroughly test the taxonomy. In live operations, customer traffic is heavily skewed toward FLIGHT_DISRUPTION and CUSTOMER_SERVICE_COMPLAINTS during winter storm irregular operations (IRROPS). In a severe snowstorm, real-world escalation rates would spike toward 85%+, degrading the automated containment rate.")
+    report.append("2. High Escalation Rate (80.5%) Shields Generation from Scrutiny:")
+    report.append("   Our 0/200 unsupported claim rate is largely achieved because the escalation engine diverts 80.5% (161/200) of queries to human specialists. While this ensures passenger safety and prevents regulatory liability, it also means the agent only auto-handles 19.5% (39/200) of customer volume. Calling the agent '83% accurate' obscures the operational reality that human agents must still handle the vast majority of conversations.")
     report.append("")
-    report.append("3. Lexical TF-IDF Retrieval Alignment Ceiling (33.0% Top-1 Alignment):")
-    report.append("   While the agent's intent classification reaches 83%, lexical retrieval only retrieves an identical historical intent 33.0% of the time (57.0% top-3). The agent appears coherent because our pipeline uses the retrieved historical replies as grounding *evidence* and safely falls back to verified policy procedures when intent divergence is detected, rather than blindly regurgitating past tweets.")
+    report.append("3. Automated Grounding Check is Narrow, Not Proof of Zero Hallucination:")
+    report.append("   The 0/200 unsupported claim result comes from a deterministic regex check for ungrounded dollar amounts and timeline promises. It is an automated sanity filter, NOT proof that responses contain zero factual errors, out-of-date information, or subtle misdirections.")
+    report.append("")
+    report.append("4. Response Helpfulness and Grounding are Protected by Conservative Escalation:")
+    report.append("   Helpfulness (4.57/5.00) and Grounding (5.00/5.00) scores are elevated because all escalated draft replies automatically append standardized contact guidance ('Please DM your record locator so our customer support team can assist you directly'), satisfying the automated evaluator's next-step criteria.")
+    report.append("")
+    report.append("5. Escalation Compliance Reflects an Automated Heuristic, Not Independent Human Ground Truth:")
+    report.append("   The 98.5% compliance figure is measured against an automated risk rubric that considers any escalation on low-risk inquiries to be acceptable. It is not independent human-labelled routing accuracy.")
+    report.append("")
+    report.append("6. Human Validation Subset has 100% Raw Agreement but Undefined Cohen's Kappa:")
+    report.append("   In the 40-example human validation subset, raw agreement is 100% (40/40), but Cohen's Kappa is mathematically undefined (0/0) because the subset contains only one class (all evaluated as appropriate). Zero marginal variance precludes meaningful chance-corrected agreement calculation.")
+    report.append("")
+    report.append("7. Golden Set Stratification vs. Real-World Live Twitter Skew:")
+    report.append("   Our 200-example golden set was constructed with deliberate stratification across all 10 intents. In real-world live operations during severe winter weather (IRROPS), customer traffic is heavily skewed toward FLIGHT_DISRUPTION, REBOOKING_AND_CHANGES, and angry CUSTOMER_SERVICE_COMPLAINTS. In a severe storm, real-world escalation rates would spike toward 90%+, sharply reducing automated containment.")
     report.append("=" * 80)
 
     report_text = "\n".join(report)

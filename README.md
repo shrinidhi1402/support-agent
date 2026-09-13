@@ -17,9 +17,9 @@ An automated support agent that blindly generates responses using standard LLMs 
 This project designs, evaluates, and documents a **safe, evidence-grounded AI Customer Support Agent for American Airlines (@AmericanAir)**. Built upon a deterministic conversation reconstruction of **26,760 customer-isolated conversations (84,172 tweets)** and evaluated against a rigorously hand-labelled **200-example golden benchmark**, the agent incorporates:
 1. **Deterministic Intent Classification (83.00% Accuracy, 82.11% Macro-F1)** across a 10-intent taxonomy.
 2. **Historical Precedent Retrieval** indexing **35,898** real customer $\rightarrow$ AmericanAir response pairs.
-3. **Evidence-Grounded Response Drafting** restricted to past handled precedent and official operating policies.
-4. **Deterministic Grounding Verification** preventing monetary promises and timeline hallucinations.
-5. **Risk-Sensitive Escalation Engine** that automatically routes transactional, financial, legal, and ambiguous queries to human specialists (`80.5%` escalation rate, `98.5%` decision appropriateness, `0.0%` hallucination rate).
+3. **Evidence-Grounded Response Drafting** restricted to past handled historical interactions and curated standard response templates.
+4. **Deterministic Grounding Verification** preventing unverified monetary promises and timeline commitments.
+5. **Risk-Sensitive Escalation Engine** that automatically routes transactional, financial, legal, and ambiguous queries to human specialists (`80.5%` escalation rate, `98.5%` heuristic policy compliance, `0/200` responses flagged for unsupported claims by the automated grounding evaluator).
 
 ---
 
@@ -32,7 +32,9 @@ Every component in this repository was developed incrementally through a rigorou
 | **Baseline 1 (B1)** | Deterministic Rule-Based Classifier | None (Expert lexical & syntactic heuristics) | 200 Golden Examples | **83.00% Accuracy** | **82.11%** | Strong, reproducible baseline. Struggles with sarcastic venting and keyword overlap. |
 | **Baseline 2 (B2)** | TF-IDF + Logistic Regression | 47,244 historical messages (weakly labelled by B1) | 200 Golden Examples (Held out) | **68.50% Accuracy** | **68.47%** | Weak supervision bottleneck: TF-IDF smooths over rare intent patterns and inherits B1 labeling errors. |
 | **Baseline 3 (B3)** | Historical Interaction Retrieval | 35,898 historical customer $\rightarrow$ agent pairs | 200 Golden Examples (Strictly excluded) | **Mean Top-1 Sim: 0.3412**<br>Top-1 Intent Match: 33.0% | Top-3 Intent Match: 57.0% | Lexical retrieval finds excellent exact-topic matches (e.g. lost items), but diverges on conversational narratives. |
-| **Final Support Agent** | **B1 Rules + B3 Retrieval + Grounded Drafting + Escalation Engine** | 35,898 historical interactions (index) | 200 Golden Examples | **83.00% Intent Acc**<br>**98.5% Escalation Appropriateness** | **82.11% Intent F1**<br>**0.0% Hallucination** | **80.5% Escalated, 19.5% Auto-Handled**. Safely handles informational queries while gating financial/rebooking risks. |
+| **Final Support Agent** | **B1 Rules + B3 Retrieval + Grounded Drafting + Escalation Engine** | 35,898 historical interactions (index) | 200 Golden Examples | **83.00% Intent Acc**<br>**98.5% Heuristic Compliance** | **82.11% Intent F1**<br>**0/200 Flagged Claims** | **80.5% Escalated, 19.5% Auto-Handled**. The final agent does not improve intent classification over Baseline 1 (83.00% accuracy, 82.11% Macro-F1); its primary contribution is historical evidence retrieval, grounded response generation, and risk-sensitive routing. |
+
+> **Important Experimental Note:** The final agent inherits its intent predictions directly from Baseline 1 without modification. Its evaluation focuses on evidence-grounded response generation and risk-sensitive escalation routing rather than intent classification gains.
 
 ---
 
@@ -142,11 +144,11 @@ WEIGHTED AVERAGE               0.8471     0.8300     0.8338     200
 - **Total Interactions:** 200
 - **Auto-Handled Responses:** 39 (`19.5%`)
 - **Escalated to Human Specialists:** 161 (`80.5%`)
-- **Escalation Appropriateness:** `98.5%` (197 / 200 correct routing decisions)
-- **Hallucination / Unsupported Claims Rate:** `0.0%` (0 out of 200)
+- **Heuristic Policy Compliance Rate:** `98.5%` (197/200 decisions complied with the automated risk rubric; this is not independent human-labelled routing accuracy)
+- **Unsupported Claims Flag Rate (Automated Evaluator):** 0/200 responses were flagged for unsupported claims by the automated grounding evaluator (this is a deterministic automated check and is NOT proof of zero hallucination).
 
 #### Escalation by Ground-Truth Intent:
-- `REBOOKING_AND_CHANGES`: **100.0% Escalated** (23/23) — Live PNR / Sabre system modification required.
+- `REBOOKING_AND_CHANGES`: **100.0% Escalated** (23/23) — The prototype has no access to live reservation/PNR systems, so transactional requests are escalated.
 - `BOOKING_AND_RESERVATIONS`: **100.0% Escalated** (8/8) — Account reservation lookups required.
 - `REFUNDS_AND_PAYMENTS`: **96.0% Escalated** (24/25) — Financial billing review and authorization required.
 - `SEATS_AND_CABIN`: **85.7% Escalated** (12/14) — Specific seat assignment modification required.
@@ -154,8 +156,8 @@ WEIGHTED AVERAGE               0.8471     0.8300     0.8338     200
 - `CUSTOMER_SERVICE_COMPLAINT`: **78.9% Escalated** (30/38) — Formal feedback / supervisor review.
 - `CHECKIN_AND_BOARDING`: **77.3% Escalated** (17/22) — Boarding pass reissue / security issues.
 - `LOYALTY_AND_AADVANTAGE`: **70.0% Escalated** (14/20) — Account mileage crediting.
-- `BAGGAGE_ISSUES`: **57.1% Escalated** (8/14) — Lost/damaged claims escalated; general policy auto-handled.
-- `GENERAL_INQUIRY_AND_OTHER`: **50.0% Escalated** (7/14) — FAQ policy auto-handled; ambiguous cases escalated.
+- `BAGGAGE_ISSUES`: **57.1% Escalated** (8/14) — Lost/damaged claims escalated; general informational policy auto-handled.
+- `GENERAL_INQUIRY_AND_OTHER`: **50.0% Escalated** (7/14) — General policy auto-handled; ambiguous cases escalated.
 
 ---
 
@@ -168,9 +170,11 @@ Automated evaluation was cross-referenced against a **40-example human validatio
 | **Relevance (1–5)** | 4.57 / 5.00 | 4.45 / 5.00 | 4.62 / 5.00 |
 | **Helpfulness (1–5)** | 4.57 / 5.00 | 4.50 / 5.00 | 4.65 / 5.00 |
 | **Fact Grounding (1–5)** | 5.00 / 5.00 | 5.00 / 5.00 | 5.00 / 5.00 |
-| **Unsupported Claims (0/1)** | 0.0% (0 fabricated) | 0.0% | 0.0% |
-| **Appropriate Escalation (0/1)**| 98.5% | 100.0% | 100.0% |
-| **Inter-Annotator Agreement** | — | **100.00% Exact Agreement** | **Cohen's $\kappa = 1.0000$** |
+| **Unsupported Claims Flag (Automated)** | 0/200 flagged | 0/40 flagged | 0/40 flagged |
+| **Heuristic Policy Compliance** | 98.5% (197/200) | 100.0% (40/40) | 100.0% (40/40) |
+| **Inter-Annotator Agreement** | — | **Raw Agreement: 100.0% (40/40)** | **Cohen's $\kappa$: N/A (single-class; undefined)** |
+
+> **Evaluation Validity Note:** Cohen's Kappa is mathematically undefined ($0/0$) on the 40-example human validation subset because all 40 audited cases were classified as appropriate escalation (zero marginal variance). Raw agreement is 100.0% (40/40).
 
 ---
 
@@ -204,21 +208,29 @@ Rather than concealing shortcomings, a production-grade support system must expl
 - **Mitigation:** Strict similarity thresholding ($<0.22$) forces automated escalation to live airport re-accommodation desks.
 
 ### Failure Mode 5: Inability to Mutate Live Transactional State
-- **Root Cause:** As an external text-based agent without authenticated live Sabre / PNR API connectivity, the agent cannot execute flight changes, issue travel vouchers, or track RFID bag tags directly.
-- **Mitigation:** 100% of rebooking, refund, and physical baggage inquiries are gated behind human escalation with structured DM record locator collection.
+- **Root Cause:** The prototype has no access to live reservation/PNR systems, so transactional requests (rebookings, refunds, boarding pass issuance) are escalated to human agents.
+- **Mitigation:** 100% of refund requests, live rebooking demands, and physical baggage tracing inquiries are explicitly gated behind human escalation with structured DM record locator collection.
 
 ---
 
 ## 8. Critical Analysis: What is Misleading About My Headline Number?
 
-A headline accuracy of **83.00%** and **0.0% hallucination rate** appears stellar on paper, but would be dangerous if accepted without understanding three operational realities:
+A headline intent accuracy of **83.00%** and **0/200 unsupported claims** looks impressive on paper, but would be dangerous if taken at face value by airline operations leaders without understanding seven key caveats:
 
-1. **High Escalation Rate (80.5%) Shields Generation from Scrutiny:**
-   The 0% hallucination rate is primarily achieved because the escalation engine diverts 80.5% of queries away from automated reply generation. While this ensures passenger safety and avoids financial liability, it means the agent only auto-contains ~19.5% of total volume. Labeling the system "83% accurate" obscures the operational fact that human airline personnel must still handle the majority of conversations.
-2. **Golden Set Stratification vs. Real-World Live Twitter Skew:**
-   The 200-example golden set was constructed with deliberate stratification across all 10 intents (including underrepresented intents like `LOYALTY` and `SEATS`). In real-world live Twitter operations, traffic during severe winter weather (IRROPS) is overwhelmingly dominated by `FLIGHT_DISRUPTION`, `REBOOKING_AND_CHANGES`, and angry `CUSTOMER_SERVICE_COMPLAINTS`. During major storm events, true operational escalation would exceed 90%, sharply reducing automation savings.
-3. **Lexical Precedent Alignment Ceiling (33.0% Top-1 Alignment):**
-   While intent classification achieves 83.00%, lexical TF-IDF retrieval only retrieves an identical historical intent 33.0% of the time (57.0% in top-3). The agent appears coherent because our pipeline uses historical replies as grounding *evidence* and safely falls back to official policy when divergence is detected, rather than naively trusting raw lexical similarity.
+1. **Final Intent Accuracy is Inherited from Baseline 1:**
+   The final agent does not improve intent classification over Baseline 1 (retaining the identical 83.00% accuracy and 82.11% Macro-F1). Its core contribution is historical evidence retrieval, grounded response generation, and risk-sensitive routing.
+2. **High Escalation Rate (80.5%) Shields Generation from Scrutiny:**
+   Our 0/200 unsupported claim rate is largely achieved because the escalation engine diverts 80.5% (161/200) of queries to human specialists. While this ensures passenger safety and prevents regulatory liability, it also means the agent only auto-handles 19.5% (39/200) of customer volume. Calling the agent "83% accurate" obscures the operational reality that human agents must still handle the vast majority of conversations.
+3. **Automated Grounding Check is Narrow, Not Proof of Zero Hallucination:**
+   The 0/200 unsupported claim result comes from a deterministic regex check for ungrounded dollar amounts and timeline promises. It is an automated sanity filter, NOT proof that responses contain zero factual errors, out-of-date information, or subtle misdirections.
+4. **Response Helpfulness and Grounding are Protected by Conservative Escalation:**
+   Helpfulness (4.57/5.00) and Grounding (5.00/5.00) scores are elevated because all escalated draft replies automatically append standardized contact guidance (*"Please DM your record locator so our customer support team can assist you directly"*), satisfying the automated evaluator's next-step criteria.
+5. **Escalation Compliance Reflects an Automated Heuristic, Not Independent Human Ground Truth:**
+   The 98.5% compliance figure is measured against an automated risk rubric that considers any escalation on low-risk inquiries to be acceptable. It is not independent human-labelled routing accuracy.
+6. **Human Validation Subset has 100% Raw Agreement but Undefined Cohen's Kappa:**
+   In the 40-example human validation subset, raw agreement is 100% (40/40), but Cohen's Kappa is mathematically undefined (0/0) because the subset contains only one class (all evaluated as appropriate). Zero marginal variance precludes meaningful chance-corrected agreement calculation.
+7. **Golden Set Stratification vs. Real-World Live Twitter Skew:**
+   Our 200-example golden set was constructed with deliberate stratification across all 10 intents. In real-world live operations during severe winter weather (IRROPS), customer traffic is heavily skewed toward `FLIGHT_DISRUPTION`, `REBOOKING_AND_CHANGES`, and angry `CUSTOMER_SERVICE_COMPLAINTS`. In a severe storm, real-world escalation rates would spike toward 90%+, sharply reducing automated containment.
 
 ---
 
